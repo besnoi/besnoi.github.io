@@ -1,0 +1,113 @@
+<!-- Wireframe CSS 0.1.0 / Neir -->
+<!-- This script undercoats your CSS by pulling out all of your div classes and ids and places them into a starter stylesheet  -->
+
+<html lang="en" dir="ltr">
+    <head>
+        <meta charset="utf-8">  
+        <title>CSS-Wireframe Tool</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <style>     
+            @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+                font-family: 'Poppins', sans-serif;
+            }
+
+            html,body,.container{
+                height:100%
+            }
+            .container{
+                width: 100%;
+                padding: 30px;
+                background: #fff;
+                background:linear-gradient(140deg, rgb(89, 212, 153), rgb(160, 135, 45));;
+            }
+
+            .container button {
+                width: 100%;
+                padding: 14px;
+                outline: none;
+                border: none;
+                color: #fff;
+                cursor: pointer;
+                margin-top: 20px;
+                font-size: 17px;
+                border-radius: 5px;
+                background: #5372F0;
+            }
+
+            .wrapper{
+                border-radius: 5px;
+                border: 1px solid #ccc;
+                margin-bottom:-10px
+            }
+
+            .wrapper .text-input {
+                display: flex;
+                height:100%;
+                border-bottom: 1px solid #ccc;
+            }
+
+            .text-input textarea {
+                height: 100%;
+                width: 100%;
+                border: none;
+                outline: none;
+                resize: none;
+                background: none;
+                font-size: 18px;
+                padding: 10px 15px;
+                border-radius: 5px;
+                background:white;
+                /* border-radius:0% */
+            }
+
+            .text-input .to-text {
+                border-radius: 0px;
+                border-left: 1px solid #ccc;
+            }
+</style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="wrapper" style="height: 88%;">
+                <div class="text-input">
+                <textarea style='border-bottom-right-radius: 0%;border-top-right-radius: 0%;' spellcheck="false" id="from" placeholder="Enter HTML"></textarea>
+                <textarea style='border-top-left-radius:0%;border-bottom-left-radius: 0%; border-left:1px solid #aaa' spellcheck="false" readonly="" disabled="" id="to" placeholder="CSS Boilerplate"></textarea>
+                </div>
+            </div>
+            <button>Wireframe all Divs</button>
+        </div>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script>
+            $('button').click(()=>{
+                html=$('#from').val()
+                // console.log
+                ids=$("div",'<div>'+html+'</div>').map(function() {
+                    if (this.id) {
+                        return this.id;
+                    }
+                }).get();
+                classes=$("div",'<div>'+html+'</div>').map(function() {
+                    if (this.className) {
+                        return this.className;
+                    }
+                }).get();
+                $css=$('#to')
+                $css.removeAttr('disabled')
+                output=''
+                for (id of ids){
+                    output+=`div#${id} {\n\tborder: 1px solid black;\n}\n`
+                }
+                for (cls of classes){
+                    output+=`div.${cls} {\n\tborder: 1px solid black;\n}\n`
+                }
+                $css.val(output)
+                console.log(html,ids,classes)
+            })
+
+        </script>
+    </body>
+</html>
