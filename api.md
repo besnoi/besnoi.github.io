@@ -1,27 +1,22 @@
-## NFHS 5 Endpoints
-
-### [/nfhs/5/api/get/indicators](https://statsindia.herokuapp.com/nfhs/5/api/get/indicators)
-
-> Gets all indicators neatly arranged with categories 
-
-### [/nfhs/5/api/get/data/{category}/{indicator}/{typology}](https://statsindia.herokuapp.com/nfhs/5/api/get/data/Tobacco%20Use%20and%20Alcohol%20Consumption%20among%20Adults%20(age%2015%20years%20and%20above)/Women%20age%2015%20years%20and%20above%20who%20consume%20alcohol%20(%)/urban)
-
-> Gets data for an indicator neatly arranged in states
-
-## Population By Religion Endpoints
-
-
-
-### [/population_by_religion/api/get/all](https://statsindia.herokuapp.com/population_by_religion/api/get/all)
-
-> Gets all rows in one go
-
-
-### [/population_by_religion/api/get/regions](https://statsindia.herokuapp.com/population_by_religion/api/get/regions)
-
-> Get all regions for which data is available (as per latest census)
-
-### [/population_by_religion/api/get/data/{state}/{district}](https://statsindia.herokuapp.com/population_by_religion/api/get/data/state/district)
-
-> Get all data for particular region (*`district=''` implies state*)
-  
+<h2 id="nfhs-5-endpoints">NFHS 5 Endpoints</h2>
+<h3 id="-nfhs-5-api-get-indicators-https-statsindia-herokuapp-com-nfhs-5-api-get-indicators-"><a href="https://statsindia.herokuapp.com/nfhs/5/api/get/indicators">/nfhs/5/api/get/indicators</a></h3>
+<blockquote>
+<p>Gets all indicators neatly arranged with categories </p>
+</blockquote>
+<h3 id="-nfhs-5-api-get-data-category-indicator-typology-https-statsindia-herokuapp-com-nfhs-5-api-get-data-tobacco-20use-20and-20alcohol-20consumption-20among-20adults-20-age-2015-20years-20and-20above-women-20age-2015-20years-20and-20above-20who-20consume-20alcohol-20-urban-"><a href="https://statsindia.herokuapp.com/nfhs/5/api/get/data/Tobacco%20Use%20and%20Alcohol%20Consumption%20among%20Adults%20(age%2015%20years%20and%20above">/nfhs/5/api/get/data/{category}/{indicator}/{typology}</a>/Women%20age%2015%20years%20and%20above%20who%20consume%20alcohol%20(%)/urban)</h3>
+<blockquote>
+<p>Gets data for an indicator neatly arranged in states</p>
+</blockquote>
+<h2 id="population-by-religion-endpoints">Population By Religion Endpoints</h2>
+<h3 id="-population_by_religion-api-get-all-https-statsindia-herokuapp-com-population_by_religion-api-get-all-"><a href="https://statsindia.herokuapp.com/population_by_religion/api/get/all">/population_by_religion/api/get/all</a></h3>
+<blockquote>
+<p>Gets all rows in one go</p>
+</blockquote>
+<h3 id="-population_by_religion-api-get-regions-https-statsindia-herokuapp-com-population_by_religion-api-get-regions-"><a href="https://statsindia.herokuapp.com/population_by_religion/api/get/regions">/population_by_religion/api/get/regions</a></h3>
+<blockquote>
+<p>Get all regions for which data is available (as per latest census)</p>
+</blockquote>
+<h3 id="-population_by_religion-api-get-data-state-district-https-statsindia-herokuapp-com-population_by_religion-api-get-data-state-district-"><a href="https://statsindia.herokuapp.com/population_by_religion/api/get/data/state/district">/population_by_religion/api/get/data/{state}/{district}</a></h3>
+<blockquote>
+<p>Get all data for particular region (<em><code>district=&#39;&#39;</code> implies state</em>)</p>
+</blockquote>
