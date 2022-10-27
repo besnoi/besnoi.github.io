@@ -21,6 +21,7 @@
 
 > Get all regions for which data is available (as per latest census)
 
-# [/population_by_religion/api/get/data/{state}/{district}](https://statsindia.herokuapp.com/population_by_religion/api/get/data/state/district)
-> Get all data for particular region (district='' implies state)
+### [/population_by_religion/api/get/data/{state}/{district}](https://statsindia.herokuapp.com/population_by_religion/api/get/data/state/district)
+
+> Get all data for particular region (*`district=''` implies state*)
   
