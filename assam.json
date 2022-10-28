@@ -20115,7 +20115,6 @@
           "type": "Polygon",
           "id": "Jorhat",
           "properties": {
-            "hc-group": "admin1",
             "hc-key": "jorhat",
             "cartodb_id": 203,
             "censuscode": 313,
