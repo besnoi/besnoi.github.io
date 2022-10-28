@@ -20113,7 +20113,6 @@
             ]
           ],
           "type": "Polygon",
-          "id": "Jorhat",
           "properties": {
             "hc-key": "jorhat",
             "cartodb_id": 203,
