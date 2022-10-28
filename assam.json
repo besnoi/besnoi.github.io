@@ -20117,8 +20117,6 @@
           "properties": {
             "hc-group": "admin1",
             "hc-key": "jorhat",
-            "hc-a2": "JT",
-            "name": "Jorhat",
             "cartodb_id": 203,
             "censuscode": 313,
             "st_cen_cd": 18,
