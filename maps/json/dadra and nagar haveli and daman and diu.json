@@ -169,7 +169,7 @@
     "translate": [70.876053, 19.459169]
   },
   "objects": {
-    "districts": {
+    "default": {
       "type": "GeometryCollection",
       "geometries": [
         {
