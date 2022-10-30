@@ -1,0 +1,91 @@
+<script src="https://code.highcharts.com/maps/highmaps.js"></script>
+<style>
+#container {
+    height: 500px;
+    min-width: 310px;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.loading {
+    margin-top: 10em;
+    text-align: center;
+    color: gray;
+}
+
+</style>
+<div id="container"></div>
+
+<script>
+(async () => {
+
+    const topology = await fetch(
+        'https://raw.githubusercontent.com/besnoi/besnoi.github.io/main/maps/json/indiaa1941.json'
+    ).then(response => response.json());
+
+    // Prepare demo data. The data is joined to map using value of 'hc-key'
+    // property by default. See API docs for 'joinBy' for more info on linking
+    // data and map.
+    const data = [
+        ['Gilgit Agency', 0.1], ['Kashmir', 20.48], ['Mysore', 84],
+        ['N.W.F.P ', 5.94], ['Bihar', 72.96], ['Bombay Presidency', 75],
+        ['Western India Agency', 95], ['Assam', 41.29], ['Bengal', 50],
+        ['Punjab', 34], ['Rajputana Agency', 90], ['Rampur', 21],
+        ['N.W.F.P. Agency', 2], ['Baluchistan Agency', 5],
+        ['Sikkim', 44], ['Madras Presidency', 25], ['Delhi', 86],
+        ['Hyderabad', 88], ['Travancore', 93], ['Andaman Islands', 88],
+        ['Central India Agency', 80], ['Central Provinces and Berar', 91], ['Khasi States', 22],
+        ['Manipur', 83], ['Cooch Behar', 84], ['United Provinces', 75], ['Kolhapur', 86],
+        ['Sind', 47], ['Punjab States', 88], ['Orissa', 89],
+        ['Tripura', 88], ['Ajmer and Merwara', 41], ['N.W.F.P.', 42],
+        ['jammu and kashmir', 43], ['Baluchistan', 2], ['uttarakhand', 45]
+    ];
+
+    // Create the chart
+    Highcharts.mapChart('container', {
+        chart: {
+            map: topology
+        },
+
+        title: {
+            text: 'Hindu Population per Province/Agency (%)'
+        },
+
+        subtitle: {
+            text: 'Source: India Census 1941'
+        },
+
+        mapNavigation: {
+            enabled: true,
+            buttonOptions: {
+                verticalAlign: 'bottom'
+            }
+        },
+
+        colorAxis: {
+            min: 0,
+           
+            maxColor:'#ff5b00'
+        },
+        credits:{
+        enabled:false
+        },
+
+        series: [{
+            data: data,
+            name: 'Random data',
+            states: {
+                hover: {
+                    color: '#BADA55'
+                }
+            },
+            dataLabels: {
+                enabled: true,
+                format: '{point.name}'
+            }
+        }]
+    });
+
+})();
+
+</script>
