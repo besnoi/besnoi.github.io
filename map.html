@@ -55,8 +55,11 @@ html, body {
 
         colorAxis: {
             min: 0,
-            minColor:'#279c45',
-            maxColor:'#d81d1e'
+            stops: [
+            [15, '#3060cf'],
+            [45, '#fffbbc'],
+            [75, '#c4463a']
+        ],
         },
         credits:{
         enabled:false
