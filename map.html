@@ -6,7 +6,7 @@
 (async () => {
 
     const topology = await fetch(
-        'https://raw.githubusercontent.com/besnoi/besnoi.github.io/main/maps/json/world.json'
+        'https://raw.githubusercontent.com/besnoi/besnoi.github.io/main/maps/json/asia.json'
     ).then(response => response.json());
 
     // Prepare demo data. The data is joined to map using value of 'hc-key'
@@ -21,7 +21,7 @@
         },
 
         title: {
-            text: 'Crime Index by Country (World)'
+            text: 'Crime Index by Country (Asia)'
         },
 
         subtitle: {
@@ -55,7 +55,7 @@
                 }
             },
             dataLabels: {
-                enabled: false,
+                enabled: true,
                 format: '{point.name}'
             }
         }]
