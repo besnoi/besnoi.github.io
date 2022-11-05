@@ -625,87 +625,65 @@ body{
 <div id="container"></div>
 
 <script>
-// Age categories
-var categories = [
-    '0-4', '5-9', '10-14', '15-19', '20-24', '25-29', '30-34', '35-40', '40-45',
-    '45-49', '50-54', '55-59', '60-64', '65-69', '70-74', '75-79', '80+'
-];
-
 Highcharts.chart('container', {
-    chart: {
-        type: 'bar'
-    },
+
     title: {
-        text: 'Population pyramid for Japan, 2022'
+        text: 'Population Growth for India and China (1955-2020)'
     },
+
     subtitle: {
-        text: 'Source: <a ' +
-            'href="https://countryeconomy.com/demography/population-structure/somalia"' +
-            'target="_blank">countryeconomy.com</a>'
+        text: 'Source: countryeconomy.com'
     },
-    accessibility: {
-        point: {
-            valueDescriptionFormat: '{index}. Age {xDescription}, {value}.'
-        }
-    },
-    xAxis: [{
-        categories: categories,
-        reversed: false,
-        labels: {
-            step: 1
-        },
-        accessibility: {
-            description: 'Age (male)'
-        }
-    }, { // mirror axis on right side
-        opposite: true,
-        reversed: false,
-        categories: categories,
-        linkedTo: 0,
-        labels: {
-            step: 1
-        },
-        accessibility: {
-            description: 'Age (female)'
-        }
-    }],
+
     yAxis: {
         title: {
-            text: null
-        },
-        labels: {
-            formatter: function () {
-                return Math.abs(this.value);
-            }
-        },
-        accessibility: {
-            description: 'Percentage population',
-            rangeDescription: 'Range: 0 to 5%'
+            text: 'Population Growth'
         }
+    },
+
+    xAxis: {
+        accessibility: {
+            rangeDescription: 'Range: 2010 to 2020'
+        }
+    },
+
+    legend: {
+        layout: 'horizontal',
+        align: 'center',
+        verticalAlign: 'bottom'
     },
 
     plotOptions: {
         series: {
-            stacking: 'normal'
-        }
-    },
-
-    tooltip: {
-        formatter: function () {
-            return '<b>' + this.series.name + ', age ' + this.point.category + '</b><br/>' +
-                'Population: ' + Highcharts.numberFormat(Math.abs(this.point.y), 1) + '%';
+            label: {
+                connectorAllowed: false
+            },
+            pointStart: 1955,
+            pointInterval: 5
         }
     },
 
     series: [{
-        name: 'Male',
-        data: [
-            -2140220, -2515672, -2712981, -2829056, -3069902, -3117795, -3228269, -3525587, -3941670, -4768303, -4607977, -3959889, -3642688, -3635712, -4479198, -3243155, -6138980
-        ]
-    }, {
-        name: 'Female',
-        data: [
-            2043064, 2404138, 2590494, 2703261, 2933714, 2980647, 3083730, 3404647, 3832461, 4651109, 4542032, 3935706, 3694683, 3819478, 4974586, 3915258, 5915921
-        ]
-    }]
+        name: 'China',
+        data: [0.02092, 0.01632, 0.02045, 0.02589, 0.02156, 0.01428, 0.01537, 0.01704, 0.01093, 0.00743, 0.00637, 0.00655, 0.00666, 0.00482]},
+    {
+        name: 'India',
+        data: [0.02227, 0.02272, 0.02319, 0.02196, 0.02264, 0.02248, 0.02287, 0.02212, 0.02069, 0.01904, 0.01732, 0.01447, 0.01292, 0.01009]
+    }],
+
+    responsive: {
+        rules: [{
+            condition: {
+                maxWidth: 500
+            },
+            chartOptions: {
+                legend: {
+                    layout: 'horizontal',
+                    align: 'center',
+                    verticalAlign: 'bottom'
+                }
+            }
+        }]
+    }
+
 });</script>
