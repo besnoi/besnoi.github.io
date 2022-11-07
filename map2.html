@@ -1,0 +1,154 @@
+<style>
+  
+#container {
+    height: 500px;
+    min-width: 300px;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+</style>
+<script src="https://code.highcharts.com/maps/highmaps.js"></script>
+<script src="https://code.highcharts.com/maps/modules/offline-exporting.js"></script>
+<script src="https://code.highcharts.com/maps/modules/pattern-fill.js"></script>
+<script src="https://code.highcharts.com/maps/modules/accessibility.js"></script>
+
+<div id="container"></div>
+<script>
+  (async () => {
+
+    const topology = await fetch(
+        'https://raw.githubusercontent.com/besnoi/besnoi.github.io/main/maps/json/india2018.json'
+    ).then(response => response.json());
+
+    // We use a darker border for some states
+    var darkBorderColor = '#ccc';
+
+
+    // Define the data, linking flags to each point's color.pattern.image. We
+    // specify a smaller border width for the smaller states. For some states we
+    // also specify an explicit x/y offset for the images, where the default is
+    // not satisfactory. Aspect ratio is provided in series definition, and the
+    // width height for each image is calculated automatically based on that and the
+    // bounding box of each state.
+    var data = [
+        ['Gujarat', 'https://upload.wikimedia.org/wikipedia/commons/5/5b/BJP_Flag.svg', 1, null, null, darkBorderColor],
+        ['Rajasthan', 'https://upload.wikimedia.org/wikipedia/commons/7/77/Indian_National_Congress_Flag.svg', 1, null, null, darkBorderColor],
+        ['Bihar', 'https://upload.wikimedia.org/wikipedia/commons/7/71/Janata_Dal_%28United%29_Flag.svg', 1, null, null, darkBorderColor],
+        ['Odisha', 'https://upload.wikimedia.org/wikipedia/commons/a/af/Biju_Janata_Dal_Flag.jpg', 1, null, null, darkBorderColor],
+        ['Chhattisgarh', 'https://upload.wikimedia.org/wikipedia/commons/7/77/Indian_National_Congress_Flag.svg', 1, null, null, darkBorderColor],
+        ['Madhya Pradesh', 'https://upload.wikimedia.org/wikipedia/commons/5/5b/BJP_Flag.svg', 1, null, null, darkBorderColor],
+        ['Himachal Pradesh', 'https://upload.wikimedia.org/wikipedia/commons/5/5b/BJP_Flag.svg', 1, null, null, darkBorderColor],
+        ['Karnataka', 'https://upload.wikimedia.org/wikipedia/commons/5/5b/BJP_Flag.svg', 1, null, null, darkBorderColor],
+        ['Arunachal Pradesh', 'https://upload.wikimedia.org/wikipedia/commons/5/5b/BJP_Flag.svg', 1, null, null, darkBorderColor],
+        ['Assam', 'https://upload.wikimedia.org/wikipedia/commons/5/5b/BJP_Flag.svg', 1, null, null, darkBorderColor],
+        ['Goa', 'https://upload.wikimedia.org/wikipedia/commons/5/5b/BJP_Flag.svg', 1, null, null, darkBorderColor],
+        ['Uttarakhand', 'https://upload.wikimedia.org/wikipedia/commons/5/5b/BJP_Flag.svg', 1, null, null, darkBorderColor],
+        ['Haryana', 'https://upload.wikimedia.org/wikipedia/commons/5/5b/BJP_Flag.svg', 1, null, null, darkBorderColor],
+        ['Manipur', 'https://upload.wikimedia.org/wikipedia/commons/5/5b/BJP_Flag.svg', 1, null, null, darkBorderColor],
+        ['Uttar Pradesh', 'https://upload.wikimedia.org/wikipedia/commons/5/5b/BJP_Flag.svg', 1, null, null, darkBorderColor],
+        ['Tripura', 'https://upload.wikimedia.org/wikipedia/commons/5/5b/BJP_Flag.svg', 1, null, null, darkBorderColor],
+        ['Punjab', 'https://upload.wikimedia.org/wikipedia/commons/f/fc/Aam_Aadmi_Party_Flag.svg', 1, null, null, darkBorderColor],
+        ['NCT of Delhi', 'https://upload.wikimedia.org/wikipedia/commons/f/fc/Aam_Aadmi_Party_Flag.svg', 1, null, null, darkBorderColor],
+        ['Maharashtra', 'https://upload.wikimedia.org/wikipedia/commons/c/c2/Shiv_Sena-1575560401.jpg', 1, null, null, darkBorderColor],
+        ['West Bengal', 'https://upload.wikimedia.org/wikipedia/commons/4/40/All_India_Trinamool_Congress_flag_%282%29.svg', 1, null, null, darkBorderColor],
+        ['Kerala', 'https://upload.wikimedia.org/wikipedia/commons/1/18/CPI-banner.svg', 1, null, null, darkBorderColor],
+        ['Nagaland', 'https://upload.wikimedia.org/wikipedia/commons/1/1c/Partyrop.png', 1, null, null, darkBorderColor],
+        ['Tamil Nadu', 'https://upload.wikimedia.org/wikipedia/commons/a/aa/Flag_DMK.svg', 1, null, null, darkBorderColor],
+        ['Telangana', 'https://upload.wikimedia.org/wikipedia/commons/5/58/TRS_Flag.svg', 1, null, null, darkBorderColor],
+        ['Puducherry', 'https://upload.wikimedia.org/wikipedia/commons/a/a6/All_India_N.R._Congress.png', 1, null, null, darkBorderColor],
+        ['Jharkhand', 'https://www.crwflags.com/fotw/images/i/in%7Djmm.gif', 1, null, null, darkBorderColor],
+        ['Andhra Pradesh', 'https://upload.wikimedia.org/wikipedia/en/8/81/Ysr_cp_flag.jpg', 1, null, null, darkBorderColor],
+        ['Mizoram', 'https://upload.wikimedia.org/wikipedia/commons/6/67/Election_Symbol_Star.svg', 1, null, null, darkBorderColor],
+        ['Meghalaya', 'https://upload.wikimedia.org/wikipedia/commons/6/61/NPP_Flag.jpg', 1, null, null, darkBorderColor],
+        ['Sikkim', 'https://upload.wikimedia.org/wikipedia/commons/2/24/Sikkim-Democratic-Front-flag.svg', 1, null, null, darkBorderColor],
+        ['Jammu and Kashmir', 'https://upload.wikimedia.org/wikipedia/commons/1/19/JKNC-flag.svg', 1, null, null, darkBorderColor],
+        
+    ];
+
+    // Create the chart
+    Highcharts.mapChart('container', {
+        chart: {
+            map: topology
+        },
+
+        title: {
+            text: 'Indian States by Political Party'
+        },
+
+        subtitle: {
+            text: 'Source: Maps Of India'
+        },
+
+        accessibility: {
+            description: 'Map of US states, where each state is filled with an illustration of its state flag.'
+        },
+
+        // Add zoom/pan
+        mapNavigation: {
+            enabled: true,
+            enableDoubleClickZoomTo: true,
+            buttonOptions: {
+                verticalAlign: 'bottom'
+            }
+        },
+
+        // Limit zoom
+        xAxis: {
+            minRange: 3500
+        },
+
+        // We do not want a legend
+        legend: {
+            enabled: false
+        },
+
+        // Make tooltip show full image
+        tooltip: {
+            useHTML: true,
+            borderColor: '#aaa',
+            headerFormat: '<b>{point.point.name}</b><br>',
+            pointFormat: '<img style="width: 150px; height: 100px;" src=\'{point.options.color.pattern.image}\'>'
+        },
+
+        // Define the series
+        series: [{
+            name: 'State flags',
+            accessibility: {
+                exposeAsGroupOnly: true
+            },
+            keys: [
+                'name', 'color.pattern.image', 'borderWidth', 'color.pattern.x', 'color.pattern.y', 'borderColor'
+            ],
+            joinBy: 'name',
+            data: data,
+            borderColor: '#fff',
+            color: {
+                pattern: {
+                    // This is inherited by the individual pattern definitions for
+                    // each point. As long as a width/height for the pattern is not
+                    // defined, Highcharts will automatically fill the bounding box
+                    // while preserving the aspect ratio defined here. Without an
+                    // aspect ratio defined, Highcharts will simply fill the
+                    // bounding box with the image, stretching it to fit.
+                    aspectRatio: 3 / 2
+                }
+            },
+            states: {
+                hover: {
+                    borderColor: '#b44',
+                    borderWidth: 2
+                }
+            }
+        }, {
+            /* Separator lines */
+            type: 'mapline',
+            nullColor: '#aaa',
+            accessibility: {
+                enabled: false
+            }
+        }]
+    });
+
+})();
+</script>
