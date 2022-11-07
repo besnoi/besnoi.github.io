@@ -28,7 +28,9 @@ eg. https://chartify.in/india-districts/bihar/aurangabad/census/decadal-variatio
 Over 130 indicators for 5th survey and 107 indicators for 4th survey. Indicators are not necessarily unique across categories but with a little tweak this should be no problem
 
 eg. https://chartify.in/india/nfhs/women-who-have-ever-used-internet
+
 eg. https://chartify.in/india-states/madhya-pradesh/nfhs/women-who-have-ever-used-internet
+
 eg. https://chartify.in/india-districts/madhya-pradesh/indore/nfhs/women-who-have-ever-used-internet
 
 Other options such as year and typology can be selected from front end.
@@ -99,4 +101,5 @@ eg. https://chartify.in/india/economy/tax-revenue
 World data would mostly follow same indicator logic implying one huge table/collection with everything in it and indicators ranging from number of billionaires to annual coal production.
 
 eg. https://chartify.in/world/annual-coal-production (single-value data)
+
 eg. https://chartify.in/world/population-pyramid/india (multi-value data)
