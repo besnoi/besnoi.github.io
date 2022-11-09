@@ -11,10 +11,10 @@
 Below are all the indicators:
 
 * sex-ratio
-* birth rate
-* death rate
+* birth-rate
+* death-rate
 * literacy-rate
-* infant mortality rate
+* infant-mortality-rate
 * density-of-population
 * total-population
 * rural-population
