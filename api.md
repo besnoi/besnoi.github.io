@@ -1,3 +1,14 @@
+## Census Endpoints
+
+### [/api/population_by_religion/data/{state}/{district}](https://chartify.in/api/population_by_religion/data/Assam/Jorhat))
+
+> Gets data for one state/district for all years
+
+### [/api/population_by_religion/choropleth/{state}/](https://chartify.in/api/population_by_religion/choropleth/Assam/2011)
+
+> Gets data for one year for all states
+
+
 ## Economy Endpoints
 
 ### [/api/economy/data/{state}/{indicator}](https://chartify.in/api/economy/data/India/literacy-rate)
