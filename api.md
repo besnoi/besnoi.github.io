@@ -29,7 +29,7 @@ Below are all the indicators:
 
 > Gets state-wise share of people with given surname 
 
-### [/api/forenames/choropleth/{surname}](https://chartify.in/api/forenames/choropleth/Manpreet)
+### [/api/forenames/choropleth/{forename}](https://chartify.in/api/forenames/choropleth/Manpreet)
 
 > Gets state-wise share of people with given first name 
   
