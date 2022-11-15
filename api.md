@@ -1,13 +1,13 @@
 ## Census Endpoints
 
+### [/api/population_by_religion/data/{state}](https://chartify.in/api/population_by_religion/data/Assam))
 ### [/api/population_by_religion/data/{state}/{district}](https://chartify.in/api/population_by_religion/data/Assam/Jorhat))
 
 > Gets data for one state/district for all years
 
-### [/api/population_by_religion/choropleth/{state}/](https://chartify.in/api/population_by_religion/choropleth/Assam/2011)
+### [/api/population_by_religion/choropleth/{state}/](https://chartify.in/api/population_by_religion/choropleth/Assam)
 
 > Gets data for one year for all states
-
 
 ## Economy Endpoints
 
@@ -19,7 +19,7 @@
 
 > Gets data for one year for all states
 
-Below are all the indicators:
+Below are all the indicators (for now):
 
 * sex-ratio
 * birth-rate
