@@ -4,7 +4,7 @@
 
 > Gets data for one state for all years
 
-### [/api/economy/choropleth/{year}/{indicator}](https://chartify.in/api/economy/choropleth/2018/urban-unemployment-rate/total)
+### [/api/economy/choropleth/{indicator}](https://chartify.in/api/economy/choropleth/urban-unemployment-rate)
 
 > Gets data for one year for all states
 
@@ -23,5 +23,13 @@ Below are all the indicators:
 * urban-unemployment-rate
 * decadal-growth-of-population
 
+## Miscellaneous
 
+### [/api/surnames/choropleth/{surname}](https://chartify.in/surnames/economy/choropleth/Iyer)
+
+> Gets state-wise share of people with given surname 
+
+### [/api/forenames/choropleth/{surname}](https://chartify.in/forenames/economy/choropleth/Manpreet)
+
+> Gets state-wise share of people with given first name 
   
