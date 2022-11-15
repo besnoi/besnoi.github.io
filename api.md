@@ -25,11 +25,11 @@ Below are all the indicators:
 
 ## Miscellaneous
 
-### [/api/surnames/choropleth/{surname}](https://chartify.in/surnames/economy/choropleth/Iyer)
+### [/api/surnames/choropleth/{surname}](https://chartify.in/api/surnames/choropleth/Iyer)
 
 > Gets state-wise share of people with given surname 
 
-### [/api/forenames/choropleth/{surname}](https://chartify.in/forenames/economy/choropleth/Manpreet)
+### [/api/forenames/choropleth/{surname}](https://chartify.in/api/forenames/choropleth/Manpreet)
 
 > Gets state-wise share of people with given first name 
   
