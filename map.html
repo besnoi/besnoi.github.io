@@ -1,10 +1,82 @@
-(async () => {
+<script src="https://code.highcharts.com/maps/highmaps.js"></script>
+<script src="https://code.highcharts.com/js/themes/dark-unica.js"></script>
+<script src="https://code.highcharts.com/maps/modules/exporting.js"></script>
+<style>
+body{
+    background:#2d2d2e
+}
+#container {
+  height: 100vh;
+  width:100vh;
+}</style>
+<div id="container"></div>
+<script>
+Highcharts.getJSON('https://cdn.jsdelivr.net/gh/highcharts/highcharts@v7.0.0/samples/data/us-population-density.json', function (data) {
 
-    const topology = await fetch(
-        'https://raw.githubusercontent.com/besnoi/besnoi.github.io/main/maps/json/asia.json'
-    ).then(response => response.json());
+    // Make codes uppercase to match the map data
+    data.forEach(function (point) {
+        point.code = point.code.toUpperCase();
+    });
 
-    // Prepare demo data. The data is joined to map using value of 'hc-key'
-    // property by default. See API docs for 'joinBy' for more info on linking
-    // data and map.
-    const data = [['Venezuela', 83.76], ['Papua New Guinea', 80.79], ['South Africa', 76.86], ['Afghanistan', 76.31], ['Honduras', 74.54], ['Trinidad And Tobago', 71.63], ['Guyana', 68.74], ['El Salvador', 67.79], ['Brazil', 67.49], ['Jamaica', 67.42], ['Syria', 67.18], ['Peru', 66.72], ['Angola', 66.48], ['Cameroon', 65.24], ['Namibia', 65.21], ['Nigeria', 64.06], ['Bangladesh', 63.9], ['Argentina', 63.82], ['Puerto Rico', 62.84], ['Bahamas', 62.06], ['Libya', 61.78], ['Dominican Republic', 61.02], ['Kenya', 60.14], ['Belarus', 59.58], ['Zimbabwe', 59.3], ['Guatemala', 58.67], ['Bolivia', 57.77], ['Fiji', 57.62], ['Malaysia', 57.29], ['Colombia', 56.87], ['Kyrgyzstan', 56.87], ['Uganda', 56.12], ['Somalia', 56.04], ['Mongolia', 56.01], ['Tanzania', 56.0], ['Maldives', 55.34], ['Ecuador', 55.23], ['Costa Rica', 54.22], ['Mexico', 54.19], ['Kazakhstan', 53.77], ['Chile', 53.42], ['Botswana', 52.98], ['Algeria', 52.03], ['France', 51.99], ['Uruguay', 51.73], ['Cambodia', 51.13], ['Belize', 50.39], ['Iran', 49.38], ['Paraguay', 49.37], ['Ethiopia', 49.3], ['Mauritius', 48.88], ['Morocco', 48.66], ['Iraq', 48.42], ['Sweden', 48.0], ['Nicaragua', 47.89], ['United States', 47.81], ['Ukraine', 47.42], ['Ghana', 46.98], ['Egypt', 46.83], ['Lebanon', 46.77], ['Myanmar', 46.51], ['Moldova', 46.35], ['Vietnam', 46.19], ['United Kingdom', 46.07], ['Indonesia', 45.93], ['Greece', 45.85], ['Ireland', 45.51], ['Panama', 45.15], ['Italy', 44.85], ['Belgium', 44.58], ['India', 44.43], ['Palestine', 43.74], ['Tunisia', 43.69], ['Zambia', 43.62], ['Australia', 43.03], ['Bosnia And Herzegovina', 42.99], ['New Zealand', 42.88], ['Albania', 42.53], ['Pakistan', 42.51], ['Philippines', 42.46], ['Sudan', 42.34], ['Canada', 41.89], ['Sri Lanka', 41.39], ['Montenegro', 41.18], ['Malta', 40.39], ['Russia', 39.99], ['Jordan', 39.96], ['Turkey', 39.62], ['Thailand', 39.35], ['North Macedonia', 39.12], ['Latvia', 38.77], ['Bulgaria', 38.21], ['Serbia', 38.1], ['Nepal', 36.01], ['Germany', 35.79], ['Hungary', 34.36], ['Luxembourg', 34.13], ['Norway', 33.72], ['Uzbekistan', 33.42], ['Kuwait', 33.42], ['Lithuania', 33.42], ['Spain', 33.32], ['Azerbaijan', 32.02], ['Israel', 31.47], ['Cyprus', 31.28], ['Poland', 30.5], ['Slovakia', 30.37], ['China', 30.14], ['Portugal', 29.91], ['Brunei', 29.0], ['Cuba', 28.33], ['Romania', 28.3], ['Singapore', 27.96], ['Finland', 27.59], ['Netherlands', 27.16], ['South Korea', 26.68], ['Denmark', 26.22], ['Bahrain', 25.64], ['Austria', 25.54], ['Czech Republic', 25.52], ['Saudi Arabia', 25.23], ['Rwanda', 24.89], ['Croatia', 24.59], ['Iceland', 23.75], ['Estonia', 23.71], ['Georgia', 23.38], ['Armenia', 22.79], ['Slovenia', 22.28], ['Japan', 22.19], ['Hong Kong', 22.0], ['Switzerland', 21.62], ['Oman', 20.34], ['Isle Of Man', 19.25], ['Taiwan', 15.46], ['United Arab Emirates', 15.23], ['Qatar', 12.13]];
+    // Instantiate the map
+    Highcharts.mapChart('container', {
+
+        chart: {
+            map: 'countries/us/us-all',
+            styledMode: true,
+            borderWidth: 1
+        },
+
+        title: {
+            text: 'US population density (/km²)'
+        },
+
+        exporting: {
+            sourceWidth: 600,
+            sourceHeight: 500
+        },
+
+        legend: {
+            layout: 'horizontal',
+            borderWidth: 0,
+            backgroundColor: 'rgba(255,255,255,0.85)',
+            floating: true,
+            verticalAlign: 'top',
+            y: 25
+        },
+
+        mapNavigation: {
+            enabled: true
+        },
+
+        colorAxis: {
+            min: 1,
+            type: 'logarithmic',
+            minColor: '#2b908f',
+            maxColor: '#000022',
+            stops: [
+                [0, '#EFEFFF'],
+                [0.5, '#2b908f'],
+                [1, 'rgb(0,17,16)']
+            ]
+        },
+
+        series: [{
+            animation: {
+                duration: 1000
+            },
+            data: data,
+            joinBy: ['postal-code', 'code'],
+            dataLabels: {
+                enabled: true,
+                color: '#FFFFFF',
+                format: '{point.code}'
+            },
+            name: 'Population density',
+            tooltip: {
+                pointFormat: '{point.code}: {point.value}/km²'
+            }
+        }]
+    });
+});
+</script>
