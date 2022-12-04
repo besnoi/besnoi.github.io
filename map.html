@@ -1,6 +1,3 @@
-<script src="https://code.highcharts.com/maps/highmaps.js"></script>
-<script src="https://code.highcharts.com/js/themes/dark-unica.js"></script>
-<script src="https://code.highcharts.com/maps/modules/exporting.js"></script>
 <style>
 body{
     background:#2d2d2e
@@ -9,74 +6,73 @@ body{
   height: 100vh;
   width:100vh;
 }</style>
+<script src="https://code.highcharts.com/maps/highmaps.js"></script>
+<script src="https://code.highcharts.com/maps/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/js/themes/dark-unica.js"></script>
 <div id="container"></div>
-<script>
-Highcharts.getJSON('https://cdn.jsdelivr.net/gh/highcharts/highcharts@v7.0.0/samples/data/us-population-density.json', function (data) {
+<script>(async () => {
 
-    // Make codes uppercase to match the map data
-    data.forEach(function (point) {
-        point.code = point.code.toUpperCase();
-    });
+    const topology = await fetch(
+        'https://code.highcharts.com/mapdata/countries/in/custom/in-all-disputed.topo.json'
+    ).then(response => response.json());
 
-    // Instantiate the map
+    // Prepare demo data. The data is joined to map using value of 'hc-key'
+    // property by default. See API docs for 'joinBy' for more info on linking
+    // data and map.
+    const data = [
+        ['madhya pradesh', 10], ['uttar pradesh', 11], ['karnataka', 12],
+        ['nagaland', 13], ['bihar', 14], ['lakshadweep', 15],
+        ['andaman and nicobar', 16], ['assam', 17], ['west bengal', 18],
+        ['puducherry', 19], ['daman and diu', 20], ['gujarat', 21],
+        ['rajasthan', 22], ['dadara and nagar havelli', 23],
+        ['chhattisgarh', 24], ['tamil nadu', 25], ['chandigarh', 26],
+        ['punjab', 27], ['haryana', 28], ['andhra pradesh', 29],
+        ['maharashtra', 30], ['himachal pradesh', 31], ['meghalaya', 32],
+        ['kerala', 33], ['telangana', 34], ['mizoram', 35], ['tripura', 36],
+        ['manipur', 37], ['arunanchal pradesh', 38], ['jharkhand', 39],
+        ['goa', 40], ['nct of delhi', 41], ['odisha', 42],
+        ['jammu and kashmir', 43], ['sikkim', 44], ['uttarakhand', 45]
+    ];
+
+    // Create the chart
     Highcharts.mapChart('container', {
-
         chart: {
-            map: 'countries/us/us-all',
-            styledMode: true,
-            borderWidth: 1
+            map: topology
         },
 
         title: {
-            text: 'US population density (/km²)'
+            text: 'Highcharts Maps basic demo'
         },
 
-        exporting: {
-            sourceWidth: 600,
-            sourceHeight: 500
-        },
-
-        legend: {
-            layout: 'horizontal',
-            borderWidth: 0,
-            backgroundColor: 'rgba(255,255,255,0.85)',
-            floating: true,
-            verticalAlign: 'top',
-            y: 25
+        subtitle: {
+            text: 'Source map: <a href="http://code.highcharts.com/mapdata/countries/in/custom/in-all-disputed.topo.json">India with disputed territories</a>'
         },
 
         mapNavigation: {
-            enabled: true
+            enabled: true,
+            buttonOptions: {
+                verticalAlign: 'bottom'
+            }
         },
 
         colorAxis: {
-            min: 1,
-            type: 'logarithmic',
-            minColor: '#2b908f',
-            maxColor: '#000022',
-            stops: [
-                [0, '#EFEFFF'],
-                [0.5, '#2b908f'],
-                [1, 'rgb(0,17,16)']
-            ]
+            min: 0
         },
 
         series: [{
-            animation: {
-                duration: 1000
-            },
             data: data,
-            joinBy: ['postal-code', 'code'],
+            name: 'Random data',
+            states: {
+                hover: {
+                    color: '#BADA55'
+                }
+            },
             dataLabels: {
                 enabled: true,
-                color: '#FFFFFF',
-                format: '{point.code}'
-            },
-            name: 'Population density',
-            tooltip: {
-                pointFormat: '{point.code}: {point.value}/km²'
+                format: '{point.name}'
             }
         }]
     });
-});
+
+})();
 </script>
