@@ -44,13 +44,13 @@
         year = start.toString()
         data[year]={}
         if (category == 'Male'){
-            title = ((startingYear!=endingYear) && 'decadal male population growth, ' || 'male population by religion, ') + (district!='' && (district+', ') || '')+state+' ('+year+')'
+            title = ((startingYear!=endingYear) && 'decadal male population growth, ' || 'male population by religion, ') + (district!='' && (district+', ') || '')+state+' ('+startingYear+(startingYear!=endingYear && ('-'+endingYear) || '')+')'
             males.forEach(arg => data[year][arg.replace('_males','')]=mainData[year][arg])
         }else if (category == 'Female'){
-            title = ((startingYear!=endingYear) && 'decadal female population growth, ' || 'female population by religion, ')+(district!='' && (district+', ') || '')+state+' ('+year+')'
+            title = ((startingYear!=endingYear) && 'decadal female population growth, ' || 'female population by religion, ')+(district!='' && (district+', ') || '')+state+' ('+startingYear+(startingYear!=endingYear && ('-'+endingYear) || '')+')'
             females.forEach(arg => data[year][arg.replace('_females','')]=mainData[year][arg])
         }else if (category == 'Total'){
-            title = ((startingYear!=endingYear) && 'decadal total population growth, ' || 'total population by religion, ')+(district!='' && (district+', ') || '')+state+' ('+year+')'
+            title = ((startingYear!=endingYear) && 'decadal total population growth, ' || 'total population by religion, ')+(district!='' && (district+', ') || '')+state+' ('+startingYear+(startingYear!=endingYear && ('-'+endingYear) || '')+')'
             for (i = 0; i<males.length;++i)
             data[year][males[i].replace('_males','')]=mainData[year][males[i]]+mainData[year][females[i]]
         }else {
@@ -60,7 +60,7 @@
             data[year]['male']=mainData[year][cat+'_males']
             data[year]['female']=mainData[year][cat+'_females']
             data[year]['total']=mainData[year][cat+'_males']+mainData[year][cat+'_females']
-            title = ((startingYear!=endingYear) && ('decadal '+category+' population growth, ') || (cat+' population share, '))+(district!='' && (district+', ') || '')+state+' ('+year+')'
+            title = ((startingYear!=endingYear) && ('decadal '+category+' population growth, ') || (cat+' population share, '))+(district!='' && (district+', ') || '')+state+' ('+startingYear+(startingYear!=endingYear && ('-'+endingYear) || '')+')'
         }
         start += 10;
     }
