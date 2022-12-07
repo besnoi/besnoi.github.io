@@ -1,13 +1,14 @@
-OKAY THIS WEBSITE IS LOADING!!!!
-NOW <BR>
 
 <style>
+    body{
+        background-color: #382851;
+    }
     #container{
-        height:600px;
+        height:100vh;
     }
 </style>
 <script src="https://code.highcharts.com/highcharts.js"></script>
-<script src="https://code.highcharts.com/themes/dark-unica.js"></script>
+<script src="purple-theme.js"></script>
 <div id="container"></div>
 <script>
     const urlParams = new URLSearchParams(window.location.search);
@@ -68,10 +69,11 @@ NOW <BR>
         let pieData = []
         console.log(data)
         for (i in data[startingYear]){
-            if (i=='atheist') i ='unspecified'; //unspecified = atheist
-            if (i=='other') i ='others'; //other = others
+            let name = i
+            if (i=='atheist') name ='unspecified'; //unspecified = atheist
+            if (i=='other') name ='others'; //other = others
             if (!i.includes('total'))
-                pieData.push({color:COLORS[i],name:i,y:data[startingYear][i]})
+                pieData.push({color:COLORS[i],name:name,y:data[startingYear][i]})
         }
         console.log(pieData)
         Highcharts.chart('container', {
@@ -85,6 +87,9 @@ NOW <BR>
             text: title,
             align: 'center'
         },
+        subtitle: {
+            text: 'Source: Census of India'
+        },
         tooltip: {
             pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
         },
@@ -94,9 +99,9 @@ NOW <BR>
             }
         },
         legend: {
-            layout: 'vertical',
-            align: 'right',
-            verticalAlign: 'middle',
+            layout: 'horizontal',
+            align: 'center',
+            verticalAlign: 'bottom',
             labelFormatter: function() {
                 return this.name+' ('+Math.round(this.percentage*100)/100+")%";
             },
@@ -112,7 +117,7 @@ NOW <BR>
             }
         },
         series: [{
-            name: 'Brands',
+            name: 'Percentage',
             colorByPoint: true,
             data: pieData,
         }]
@@ -127,11 +132,12 @@ NOW <BR>
             for (year in data){
                 dt.push(data[year][i])
             }
-            if (i=='atheist') i ='unspecified'; //unspecified = atheist
-            if (i=='other') i ='others'; //other = others
+            let name = i
+            if (i=='atheist') name ='unspecified'; //unspecified = atheist
+            if (i=='other') name ='others'; //other = others
             barData.push({
                 color: COLORS[i],
-                name: i,
+                name: name,
                 data:dt
             })
         }
@@ -144,7 +150,7 @@ NOW <BR>
                 text: title
             },
             subtitle: {
-                text: 'Source: WorldClimate.com'
+                text: 'Source: Census of India'
             },
             xAxis: {
                 categories: years,
