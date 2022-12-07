@@ -15,7 +15,6 @@
     const startingYear = urlParams.get('startingYear');
     const endingYear = urlParams.get('endingYear');
     const COLORS = {'total':'Crimson','male':'#0097fa','female':'#ff659f','hindu':'Orange','muslim':'Green','christian':'#1E90FF','sikh':'Brown','buddhist':'#BE7F9D','jain':'Salmon','other':'purple'};
-    (async () => {
 
     const mainData = await fetch(
         `https://chartify.in/api/population_by_religion/data/${state}/${district}`
@@ -172,6 +171,5 @@
         });
 
     }
-})()
   </script>
   
