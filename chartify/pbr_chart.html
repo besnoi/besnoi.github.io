@@ -4,7 +4,7 @@
         background-color: #382851;
     }
     #container{
-        height:90vh;
+        height:95vh;
     }
 </style>
 <script src="https://code.highcharts.com/highcharts.js"></script>
@@ -90,6 +90,9 @@
         subtitle: {
             text: 'Source: Census of India'
         },
+        credits: {
+            enabled: false;
+        },
         tooltip: {
             pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
         },
@@ -151,6 +154,9 @@
             },
             subtitle: {
                 text: 'Source: Census of India'
+            },
+            credits: {
+                enabled: false;
             },
             xAxis: {
                 categories: years,
