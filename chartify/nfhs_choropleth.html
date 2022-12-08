@@ -1,0 +1,94 @@
+
+<style>
+    body{
+        background-color: #382851;
+    }
+    #container{
+        height:95vh;
+    }
+</style>
+<script src="https://code.highcharts.com/maps/highmaps.js"></script>
+<script src="purple-theme.js"></script>
+<div id="container"></div>
+<script>
+    const urlParams = new URLSearchParams(window.location.search);
+    // const state = urlParams.get('state');
+    // const district = urlParams.get('district');
+    const id = urlParams.get('id');
+    const round = urlParams.get('round');
+    const typology = urlParams.get('typology');
+    var mainData;
+    (async () => {
+
+    mainData = await fetch(
+        `https://chartify.in/api/nfhs/data/${id}`
+    ).then(response => response.json());
+
+    const topology = await fetch(
+        'https://besnoi.github.io/maps/json/india2018.json'
+    ).then(response => response.json());
+
+    let data = []
+    mainData[round].forEach(arg => {
+        if (arg['total']!='') return data.push([arg['state'],parseInt(arg['total'])])
+    })
+    var indicator = mainData[round][0]['indicator']
+    var identifier = mainData[round][0]['identifier'].replaceAll('-',' ').replace("non ","non-").replace('semi ','semi-').replace('HIV AIDS','HIV/AIDS')
+    var unit = ''
+    if (round=='5')
+        year='2019-20'
+    if (indicator.includes('(%)'))
+        unit = 'Percentage'
+    else if (indicator.includes('Rs.'))
+        unit = 'Rupees'
+    else
+        unit = 'Rate'
+
+    Highcharts.mapChart('container', {
+        chart: {
+            map: topology
+        },
+
+        title: {
+            text: identifier
+        },
+
+        credits:{
+            enabled:false
+        },
+
+        subtitle: {
+            text: 'Source map: NFHS-'+round+' ('+year+')'
+        },
+
+        mapNavigation: {
+            enabled: true,
+            buttonOptions: {
+                verticalAlign: 'bottom'
+            }
+        },
+
+        colorAxis: {
+            min: 0,
+            minColor:'#9575CD',
+            maxColor:'#673AB7'
+        },
+        
+        series: [{
+            data: data,
+            name: unit,
+            states: {
+                hover: {
+                    color: '#BADA55'
+                }
+            },
+            dataLabels: {
+                enabled: false,
+                format: '{point.name}'
+            }
+        }]
+    });
+    
+})()
+  </script>
+  
