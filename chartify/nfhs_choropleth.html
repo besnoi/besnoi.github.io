@@ -43,10 +43,9 @@
         unit = 'Rupees'
     else
         unit = 'Rate'
-    if (identifier.includes('percentage of')){
-        identifier.replace('percentage of ','')
-        identifier+=' (%)'
-    }
+        
+    if (identifier.includes('percentage of'))
+        identifier=identifier.replace('percentage of ','')+' (%)'
 
     Highcharts.mapChart('container', {
         chart: {
@@ -73,7 +72,6 @@
         },
 
         colorAxis: {
-            min: 0,
             minColor:'#CABAE5',
             maxColor:'#673AB7'
         },
