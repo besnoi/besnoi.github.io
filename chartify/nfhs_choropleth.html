@@ -33,7 +33,7 @@
         if (arg['total']!='') return data.push([arg['state'],parseInt(arg['total'])])
     })
     var indicator = mainData[round][0]['indicator']
-    var identifier = mainData[round][0]['identifier'].replaceAll('-',' ').replace("non ","non-").replace('semi ','semi-').replace('HIV AIDS','HIV/AIDS')
+    var identifier = mainData[round][0]['identifier'].replaceAll('-',' ').replace("non ","non-").replace('semi ','semi-').replace('check up','check-up').replace('out of pocket','out-of-pocket').replace('waist to hip','waist-to-hip').replace('HIV AIDS','HIV/AIDS')
     var unit = ''
     if (round=='5')
         year='2019-20'
@@ -43,6 +43,10 @@
         unit = 'Rupees'
     else
         unit = 'Rate'
+    if (identifier.includes('percentage of')){
+        identifier.replace('percentage of ','')
+        identifier+=' (%)'
+    }
 
     Highcharts.mapChart('container', {
         chart: {
