@@ -30,7 +30,7 @@
 
     let data = []
     mainData[round].forEach(arg => {
-        if (arg['total']!='') return data.push([arg['state'],parseInt(arg['total'])])
+        if (arg[typology]!='') return data.push([arg['state'],parseInt(arg[typology])])
     })
     var indicator = mainData[round][0]['indicator']
     var identifier = mainData[round][0]['identifier'].replaceAll('-',' ').replace("non ","non-").replace('semi ','semi-').replace('check up','check-up').replace('out of pocket','out-of-pocket').replace('waist to hip','waist-to-hip').replace('HIV AIDS','HIV/AIDS')
