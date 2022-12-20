@@ -14,8 +14,8 @@
     const state = urlParams.get('state');
     const district = urlParams.get('district');
     const id = urlParams.get('id');
-    const startingRound = urlParams.get('startingRound');
-    const endingRound = urlParams.get('endingRound');
+    const startingRound = parseInt(urlParams.get('startingRound'));
+    const endingRound = parseInt(urlParams.get('endingRound'));
     const COLORS = {'total':'Crimson','rural':'#0097fa','urban':'#ff659f'};
     (async () => {
 
@@ -28,16 +28,23 @@
     var subdata={'total':[],'urban':[],'rural':[]}
     var data=[]
 
-    for (round in mainData){
-        rounds.push("NFHS-"+round)
-        for (obj of mainData[round]){
-            if (obj['state']==state && obj['district']==district){
-                subdata['total'].push(obj['total'])
-                subdata['urban'].push(obj['urban'])
-                subdata['rural'].push(obj['rural'])
-            }
-        }
+    function isRound(round){
+        round = parseInt(round)
+        if (round>=startingRound && round<=endingRound)
+            return true
+        return false
     }
+
+    for (round in mainData)
+        if (isRound(round)){
+            rounds.push("NFHS-"+round)
+            for (obj of mainData[round])
+                if (obj['state']==state && obj['district']==district){
+                    subdata['total'].push(obj['total'])
+                    subdata['urban'].push(obj['urban'])
+                    subdata['rural'].push(obj['rural'])
+                }
+        }
 
     // OUR TITLE
     var identifier=mainData[rounds[0].substr(5)][0]['identifier'].replaceAll('-',' ').replace("non ","non-").replace('semi ','semi-').replace('check up','check-up').replace('out of pocket','out-of-pocket').replace('waist to hip','waist-to-hip').replace('HIV AIDS','HIV/AIDS')
