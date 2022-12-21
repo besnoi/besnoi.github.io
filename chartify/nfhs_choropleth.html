@@ -1,4 +1,6 @@
 
+
+
 <style>
     body{
         background-color: #382851;
@@ -12,8 +14,7 @@
 <div id="container"></div>
 <script>
     const urlParams = new URLSearchParams(window.location.search);
-    // const state = urlParams.get('state');
-    // const district = urlParams.get('district');
+    const state = urlParams.get('state');
     const id = urlParams.get('id');
     const round = urlParams.get('round');
     const typology = urlParams.get('typology');
@@ -24,22 +25,59 @@
         `https://chartify.in/api/nfhs/data/${id}`
     ).then(response => response.json());
 
-    const topology = await fetch(
-        'https://besnoi.github.io/maps/json/india2018.json'
-    ).then(response => response.json());
+    function getMap(state,round){
+        let map=''
+        round=parseInt(round)
+        if (state=='India'){
+            if (round==5)
+                map='india-2019'
+            else if (round==4)
+                map='india2018'
+            else if (round==3)
+                map='india2013'
+            else
+                map='india1999'
+        }else if (state=='Bihar' || state=='Uttar Pradesh' || state=='Madhya Pradesh') {
+            if (round>=4)
+                map=state.toLowerCase()
+            else if (round==3)
+                map=state.toLowerCase()+'-2001'
+            else
+                map=state.toLowerCase()+'-1999'
+            
+        }else{
+            map=state.toLowerCase()
+        }
+        console.log(map)
+        return 'https://besnoi.github.io/maps/json/'+map+'.json'
+    }
+
+    const map  = getMap(state,round)
+
+    const topology = await fetch(map).then(response => response.json());
 
     let data = []
     mainData[round].forEach(arg => {
-        if (arg[typology]!='') return data.push([arg['state'],parseInt(arg[typology])])
+        if (arg[typology]!='' && (state=='India' ?  arg['district']=='' : arg['state']==state))
+            return data.push([state=='India' ? arg['state'] : arg['district'],parseInt(arg[typology])])
     })
-    var indicator = mainData[round][0]['indicator']
-    var identifier = mainData[round][0]['identifier'].replaceAll('-',' ').replace("non ","non-").replace('semi ','semi-').replace('check up','check-up').replace('out of pocket','out-of-pocket').replace('waist to hip','waist-to-hip').replace('HIV AIDS','HIV/AIDS')
+    console.log(data)
+    var identifier = mainData[round.toString()][0]['identifier'].replaceAll('-',' ').replace("non ","non-").replace('semi ','semi-').replace('check up','check-up').replace('out of pocket','out-of-pocket').replace('waist to hip','waist-to-hip').replace('HIV AIDS','HIV/AIDS')
     var unit = ''
-    if (round=='5')
-        year='2019-20'
-    if (indicator.includes('(%)'))
+    if (round==1)
+        year='1992-1993'
+    else if (round==2)
+        year='1998-1999'
+    else if (round==3)
+        year='2005-2006'
+    else if (round==4)
+        year='2015-2016'
+    else
+        year='2019-2021'
+    
+    if (identifier.includes('percentage'))
         unit = 'Percentage'
-    else if (indicator.includes('Rs.'))
+    else if (identifier.includes('Rs.'))
         unit = 'Rupees'
     else
         unit = 'Rate'
