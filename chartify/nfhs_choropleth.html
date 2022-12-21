@@ -85,7 +85,7 @@
     if (identifier.includes('percentage of'))
         identifier=identifier.replace('percentage of ','')+' (%)'
 
-    Highcharts.mapChart('container', {
+    mapChart = Highcharts.mapChart('container', {
         chart: {
             map: topology
         },
@@ -115,7 +115,6 @@
         },
         
         series: [{
-            data: data,
             name: unit,
             states: {
                 hover: {
@@ -128,6 +127,10 @@
             }
         }]
     });
+        
+    mapChart.update({
+        series:{data:data}
+    })
     
 })()
   </script>
