@@ -1,0 +1,125 @@
+
+
+<style>
+    body{
+        background-color: #382851;
+    }
+    #container{
+        height:95vh;
+    }
+</style>
+<script src="https://code.highcharts.com/maps/highmaps.js"></script>
+<script src="purple-theme.js"></script>
+<div id="container"></div>
+<script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const state = urlParams.get('state');
+    const year = urlParams.get('year');
+    let gender = urlParams.get('gender');
+    const COLORS = {'hindu':'#FF4500','muslim':'#009000','christian':'#1E90FF','sikh':'#DC143C','buddhist':'#BE7F9D','jain':'#FA8072','other':'#A020F0','atheist':'#808080',};
+    
+    if (gender!='Total')
+        gender=gender+'s'
+    gender=gender.toLowerCase();
+    let religion= urlParams.get('religion').toLowerCase();
+    if (religion=='unspecified') religion='atheist'; else if (religion=='others') religion='other'
+    var mainData;
+    (async () => {
+
+    mainData = await fetch(
+        `https://chartify.in/api/population_by_religion/choropleth/${state}`
+    ).then(response => response.json());
+
+console.log("here",mainData)
+
+    console.log(mainData[year])
+    let data=[]
+
+    for (e in mainData[year]){
+        console.log(e,religion+'_'+gender,mainData[year][e])
+        data.push([e,mainData[year][e][religion+'_'+gender]])
+    }
+    console.log('eq5q',data)
+
+
+    // SELECT MAP
+    if (state === "India") 
+        if (Number.parseInt(year) < 2000) 
+            mapURL = "https://besnoi.github.io/maps/json/india-1999.json";
+        else 
+            mapURL = "https://besnoi.github.io/maps/json/india-2013.json";
+    else 
+        if (state === "Andhra Pradesh" && Number.parseInt(year) < 2014) 
+            mapURL = "https://besnoi.github.io/maps/json/andhra-pradesh-2014.json";
+        else 
+            mapURL = "https://besnoi.github.io/maps/json/" + state.toLowerCase() + ".json";
+        
+    
+    if (parseInt(year) < 2001 && ["Bihar", "Madhya Pradesh", "Uttar Pradesh"].includes(state)) 
+        mapURL = `https://besnoi.github.io/maps/json/${state.toLowerCase()}-1999.json`;
+    else 
+        if (Number.parseInt(year) < 2011 && ["Bihar", "Madhya Pradesh", "Uttar Pradesh"].includes(state))
+            mapURL = `https://besnoi.github.io/maps/json/${state.toLowerCase()}-2001.json`;
+        else 
+            if (Number.parseInt(year) < 2021 &&  ["Uttar Pradesh"].includes(state)) 
+                mapURL = `https://besnoi.github.io/maps/json/${state.toLowerCase()}-2011.json`;
+        
+    const topology = await fetch(mapURL).then(response => response.json());
+
+    let title=religion + ' population by '+(state=='India' && 'State' || ('District, '+state))+', '+year
+
+
+
+
+    mapChart = Highcharts.mapChart('container', {
+        chart: {
+            animation: true,
+            map: topology
+        },
+
+        title: {
+            text: title
+        },
+
+        credits:{
+            enabled:false
+        },
+
+        subtitle: {
+            text: 'Source map: Census of India
+        },
+
+        mapNavigation: {
+            enabled: true,
+            buttonOptions: {
+                verticalAlign: 'bottom'
+            }
+        },
+
+        colorAxis: {
+            min:0,
+            minColor:'#FFFFFF',
+            maxColor:COLORS[religion]
+        },
+        
+        series: [{
+            name: 'Percentage',
+            states: {
+                hover: {
+                    color: '#BADA55'
+                }
+            },
+            dataLabels: {
+                enabled: false,
+                format: '{point.name}'
+            }
+        }]
+    });
+
+    mapChart.update({
+        series:{data:data}
+    })
+    
+})()
+  </script>
+  
