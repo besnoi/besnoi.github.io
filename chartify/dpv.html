@@ -1,0 +1,123 @@
+<style>
+    body{
+        background-color: #382851;
+    }
+    #container{
+        height:95vh;
+    }
+</style>
+</style>
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="purple-theme.js"></script>
+<div id="container"></div>
+<script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const state = urlParams.get('state');
+    const gender = urlParams.get('gender').toLowerCase();
+    // const COLORS = {'hindu':'#FF4500','muslim':'#009000','christian':'#1E90FF','sikh':'#DC143C','buddhist':'#BE7F9D','jain':'#FA8072','other':'#A020F0','atheist':'#808080',};
+    (async () => {
+        mainData = await fetch(
+            `https://chartify.in/api/decadal_variation/${state}`
+        ).then(response => response.json());
+
+        let barData=[]
+        let lineData=[0] 
+        for (year in mainData){
+            if (gender=='total')
+                barData.push((mainData[year]['total_males']+mainData[year]['total_females'])||0)
+            else
+                barData.push(mainData[year]['total_'+gender+'s']||0)
+        }
+
+        for (i=0;i<barData.length-1;++i)
+            if (barData[i]==0)
+                lineData.push(0)
+            else
+                lineData.push(Math.round(10000*(barData[i+1]-barData[i])/barData[i])/100)
+    
+ 
+        console.log(barData)
+        console.log(lineData)
+
+        Highcharts.chart('container', {
+            chart: {
+                zoomType: 'xy'
+            },
+            title: {
+                text: 'Decadal Population Variation,'+state+' (1991-2001)',
+                align: 'center'
+            },
+            credits: {
+                enabled: false
+            },
+            subtitle: {
+                text: 'Source: Census Of India',
+                verticalAlign:'bottom'
+            },
+            xAxis: [{
+                categories: ['1901', '1911', '1921', '1931', '1941', '1951',
+                    '1961', '1971', '1981', '1991', '2001', '2011'],
+                crosshair: true
+            }],
+            yAxis: [{ // Primary yAxis
+                labels: {
+                    format: '{value}',
+                    style: {
+                        color: Highcharts.getOptions().colors[1]
+                    }
+                },
+                title: {
+                    text: 'Population',
+                    style: {
+                        color: Highcharts.getOptions().colors[1]
+                    }
+                }
+            }, { // Secondary yAxis
+                title: {
+                    text: 'Percentage Change (%)',
+                    style: {
+                        color: Highcharts.getOptions().colors[0]
+                    }
+                },
+                labels: {
+                    format: '{value}%',
+                    style: {
+                        color: Highcharts.getOptions().colors[0]
+                    }
+                },
+                opposite: true
+            }],
+            tooltip: {
+                shared: true
+            },
+            legend: {
+                align: 'center',
+                verticalAlign:'top',
+                backgroundColor:
+                    Highcharts.defaultOptions.legend.backgroundColor || // theme
+                    'rgba(255,255,255,0.25)'
+            },
+            series: [{
+                name: 'Population',
+                type: 'column',
+                data: barData,
+                tooltip: {
+                    valueSuffix: ''
+                }
+
+            }, {
+                name: 'Percentage Change',
+                type: 'line',
+                yAxis: 1,
+                data: lineData,
+                tooltip: {
+                    valueSuffix: '%'
+                }
+            }]
+        });
+
+    })()
+
+
+</script>
+    
