@@ -27,15 +27,13 @@
     (async () => {
 
     mainData = await fetch(
-        `https://chartify.in/api/population_by_religion/choropleth/${state}`
+        `https://chartify.in/api/population_by_religion/choropleth/${state}/${year}`
     ).then(response => response.json());
 
-console.log("here",mainData)
-
-    console.log(mainData[year])
+    console.log(mainData)
     let data=[]
 
-    for (e in mainData[year]){
+    for (e in mainData){
         console.log(e,religion+'_'+gender,mainData[year][e])
         data.push([e,mainData[year][e][religion+'_'+gender]])
     }
