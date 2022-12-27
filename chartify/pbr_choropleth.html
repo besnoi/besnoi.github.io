@@ -64,7 +64,7 @@
         
     const topology = await fetch(mapURL).then(response => response.json());
 
-    let title=gender+' '+religion + ' population by '+(state=='India' && 'State' || ('District, '+state))+', '+year
+    let title=urlParams.get('gender')+' '+religion + ' population by '+(state=='India' && 'State' || ('District, '+state))+', '+year
 
 
 
