@@ -12,7 +12,7 @@
 <div id="container"></div>
 <script>
     const urlParams = new URLSearchParams(window.location.search);
-    const name = urlParams.get('name');
+    const name = urlParams.get('name').charAt(0).toUpperCase() + urlParams.get('name').slice(1);
     const type = urlParams.get('type').toLowerCase();
     // const COLORS = {'hindu':'#FF4500','muslim':'#009000','christian':'#1E90FF','sikh':'#DC143C','buddhist':'#BE7F9D','jain':'#FA8072','other':'#A020F0','atheist':'#808080',};
     (async () => {
@@ -66,7 +66,7 @@
                 enabled:false
             },
             title: {
-                text: `State-wise shares of People with Surname ‘${name}’`,
+                text: `State-wise shares of People with ${type} ‘${name}’`,
                 align: 'center'
             },
             subtitle:{
