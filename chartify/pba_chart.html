@@ -1,0 +1,129 @@
+
+
+<style>
+    body{
+        background-color: #382851;
+    }
+    #container{
+        height:95vh;
+    }
+</style>
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="purple-theme.js"></script>
+<div id="container"></div>
+<script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const state = urlParams.get('state');
+    const typology = urlParams.get('typology');
+    const year = urlParams.get('year');
+    const religion = urlParams.get('religion').toLowerCase();
+
+    (async () => {
+
+    const mainData = await fetch(
+        `https://chartify.in/api/population_by_age/data/${state}`
+    ).then(response => response.json());
+
+    console.log("WORKING")
+    console.log(mainData)
+    var data = {}
+    var age = []
+    var maleData =[]
+    var femaleData =[]
+
+    for (i in mainData[year][typology])
+        if (i.includes('-') || i.includes('+')){
+            age.push(i)
+            maleData.push(-mainData[year][typology][i][religion+'_males'])
+            femaleData.push(mainData[year][typology][i][religion+'_females'])
+        }
+    console.log(age)
+    console.log(maleData)
+    console.log(femaleData)
+    console.log(religion)
+
+    var title = ''
+
+    if (religion=='total')
+        title = 'Population pyramid for all communities, '+state+', '+year+' ('+typology+')'
+    else if (religion=='other')
+        title = 'Population pyramid for other communities, '+state+', '+year+' ('+typology+')'
+    else
+        title='Population pyramid for '+religion+' community'+', '+state+', '+year+' ('+typology+')'
+
+
+    Highcharts.chart('container', {
+    chart: {
+        type: 'bar'
+    },
+    title: {
+        text: title
+    },
+    subtitle: {
+        text: 'Source: Census of India'
+    },
+    accessibility: {
+        point: {
+            valueDescriptionFormat: '{index}. Age {xDescription}, {value}%.'
+        }
+    },
+    xAxis: [{
+        categories: age,
+        reversed: false,
+        labels: {
+            step: 1
+        },
+        accessibility: {
+            description: 'Age (male)'
+        }
+    }, { // mirror axis on right side
+        opposite: true,
+        reversed: false,
+        categories: age,
+        linkedTo: 0,
+        labels: {
+            step: 1
+        },
+        accessibility: {
+            description: 'Age (female)'
+        }
+    }],
+    yAxis: {
+        title: {
+            text: null
+        },
+        labels: {
+            formatter: function () {
+                return Math.abs(this.value);
+            }
+        }
+    },
+
+    plotOptions: {
+        series: {
+            stacking: 'normal'
+        }
+    },
+
+    tooltip: {
+        formatter: function () {
+            return '<b>' + this.series.name + ', age ' + this.point.category + '</b><br/>' +
+                'Population: ' + Math.abs(this.point.y);
+        }
+    },
+
+    series: [{
+        name: 'Male',
+        data: maleData
+    }, {
+        name: 'Female',
+        data: femaleData
+    }]
+});
+       
+
+
+
+})()
+  </script>
+  
