@@ -66,7 +66,8 @@
                 enabled:false
             },
             title: {
-                text: `State-wise shares of People with Surname ‘${name}’`
+                text: `State-wise shares of People with Surname ‘${name}’`,
+                align: 'center'
             },
             subtitle:{
                 text: 'Source: forenames.io',
@@ -79,14 +80,22 @@
                     valueSuffix: '%'
                 }
             },
+            legend: {
+                layout: 'horizontal',
+                align: 'center',
+                verticalAlign: 'bottom',
+                labelFormatter: function() {
+                    return this.name+' ('+Math.round(this.percentage*100)/100+")%";
+                },
+            },
             plotOptions: {
                 pie: {
                     allowPointSelect: true,
                     cursor: 'pointer',
                     dataLabels: {
-                        enabled: true,
-                        format: '<b>{point.name}</b>: {point.percentage:.1f} %'
-                    }
+                        enabled: false
+                    },
+                    showInLegend: true
                 }
             },
             series: [{
