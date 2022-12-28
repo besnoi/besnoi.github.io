@@ -1,0 +1,96 @@
+
+<style>
+    body{
+        background-color: #382851;
+    }
+    #container{
+        height:95vh;
+    }
+</style>
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="purple-theme.js"></script>
+<div id="container"></div>
+<script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const state = urlParams.get('state');
+    const district = urlParams.get('district');
+    const id = urlParams.get('id');
+    (async () => {
+
+    const mainData = await fetch(
+        `https://chartify.in/api/secc/data/${id}/${state}/${district}`
+    ).then(response => response.json());
+
+    var divider={}
+
+    if (id!='total-households'){
+        const totalData = await fetch(
+            `https://chartify.in/api/secc/data/total-households/${state}/${district}`
+        ).then(response => response.json());
+        for (i in totalData)
+            divider[i]=totalData[i]
+    }
+
+
+    var categories = []
+    var dt=[]
+
+    for (category in mainData){
+        categories.push(category+"")
+        if (id=='total-households')
+            dt.push(mainData[category])
+        else
+            dt.push(Math.round(10000*mainData[category]/divider[category])/100)
+    }
+    var identifier=id.replaceAll('--','/').replace('destitutesliving','destitutes/living').replace('twothreefour','two/three/four').replace('threefour','three/four').replaceAll('-',' ')
+    var data={name:"Value",data:dt}
+    console.log(data)
+    console.log(categories)
+
+  
+    Highcharts.chart('container', {
+        chart: {
+            type: 'column'
+        },
+        legend:{
+            enabled:false
+        },
+        title: {
+            text: identifier+', '+(district!='' && (district+', ') || '')+state
+        },
+        subtitle: {
+            text: 'Source: Socio Economic and Caste Census, 2011',
+            verticalAlign:'bottom'
+        },
+        credits: {
+            enabled: false
+        },
+        xAxis: {
+            categories: categories,
+            crosshair: true
+        },
+        yAxis: {
+            min: 0,
+            title: {
+                text: 'Number of Persons'
+            }
+        },
+        tooltip: {
+            headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+            pointFormat: '<tr><td style="color:white;padding:0">{point.y:.f}'+(id!='total-households' && '%' || '')+'</td></tr>',
+            footerFormat: '</table>',
+            shared: true,
+            useHTML: true
+        },
+        plotOptions: {
+            column: {
+                pointPadding: 0.2,
+                borderWidth: 0
+            }
+        },
+        series: [data]
+    });
+
+})()
+  </script>
+  
