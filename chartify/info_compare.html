@@ -1,0 +1,177 @@
+
+
+
+<style>
+    body{
+        background-color: #382851;
+    }
+    #container{
+        height:95vh;
+    }
+</style>
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="purple-theme.js"></script>
+<div id="container"></div>
+<script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const state = urlParams.get('state');
+    const category = urlParams.get('category');
+    const state2 = urlParams.get('state2');
+    const state3 = urlParams.get('state3');
+    var years  = []
+    const COLORS = {'total':'Crimson','male':'#0097fa','female':'#ff659f','hindu':'Orange','muslim':'Green','christian':'#1E90FF','sikh':'Brown','buddhist':'#BE7F9D','jain':'Salmon','other':'purple'};
+
+
+    (async () => {
+
+    var mainData = [], state2Data=[],state3Data=[]
+
+    if (category.substring(category.length-10)=='Population'){
+        mainData = await fetch(
+            `https://chartify.in/api/population_by_religion/data/${state}`
+        ).then(response => response.json());
+        if (state2){
+            state2Data = await fetch(
+                `https://chartify.in/api/population_by_religion/data/${state2}`
+            ).then(response => response.json());
+            if (state3)
+                state3Data = await fetch(
+                    `https://chartify.in/api/population_by_religion/data/${state3}`
+                ).then(response => response.json());
+        }
+    } else{//RATE??
+        rate = category.replaceAll(' ','-').toLowerCase()
+        mainData = await fetch(
+            `https://chartify.in/api/economy/data/${state}/${rate}`
+        ).then(response => response.json());
+        if (state2){
+            state2Data = await fetch(
+                `https://chartify.in/api/economy/data/${state2}/${rate}`
+            ).then(response => response.json());
+            if (state3)
+                state3Data = await fetch(
+                    `https://chartify.in/api/economy/data/${state3}/${rate}`
+                ).then(response => response.json());
+        }
+        mainData=mainData['total']
+        state2Data=state2Data['total']
+        state3Data=state3Data['total']
+    }
+
+    console.log("WORKING")
+    console.log(mainData)
+    var data = {}
+    let stateData1=[],stateData2=[],stateData3=[]
+
+    for (year in mainData){
+        console.log(year)
+        years.push(year)
+        if (category.substring(category.length-10)=='Population'){ //PBR
+            religion = category.substring(0,category.length-11).toLowerCase()
+            stateData1.push(Math.round(10000*(mainData[year][religion+'_males']+mainData[year][religion+'_females'])/(mainData[year]['total_males']+mainData[year]['total_females']))/100)
+            if (state2Data[year])
+                stateData2.push(Math.round(10000*(state2Data[year][religion+'_males']+state2Data[year][religion+'_females'])/(state2Data[year]['total_males']+state2Data[year]['total_females']))/100)
+            else
+                stateData2.push(0)
+            if (state3Data[year])
+                stateData3.push(Math.round(10000*(state3Data[year][religion+'_males']+state3Data[year][religion+'_females'])/(state3Data[year]['total_males']+state3Data[year]['total_females']))/100)
+            else
+                stateData3.push(0)
+            
+        }else {
+            stateData1.push(mainData[year] && mainData[year].value || 0)
+            if (state2){
+                stateData2.push(state2Data[year] && state2Data[year].value || 0)
+                if (state3)
+                    stateData3.push(state3Data[year] && state3Data[year].value || 0)
+            }
+        }
+    }
+
+    let compareData=[{name:state,data:stateData1}]
+    if (state2){
+        compareData.push({name:state2,data:stateData2})
+        if (state3)
+            compareData.push({name:state3,data:stateData3})
+    }
+
+
+    console.log(stateData1)
+    console.log(stateData2)
+
+    var title = category
+
+    if (category.substring(category.length-10)=='Population') //pbr
+        Highcharts.chart('container', {
+                chart: {
+                    type: 'column'
+                },
+                title: {
+                    text: title
+                },
+                subtitle: {
+                    text: 'Source: Census of India'
+                },
+                credits: {
+                    enabled: false
+                },
+                xAxis: {
+                    categories: years,
+                    crosshair: true
+                },
+                yAxis: {
+                    min: 0,
+                    title: {
+                        text: 'Number of Persons'
+                    }
+                },
+                tooltip: {
+                    headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                    pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                        '<td style="color:white;padding:0">{point.y:.1f}</td></tr>',
+                    footerFormat: '</table>',
+                    shared: true,
+                    useHTML: true
+                },
+                plotOptions: {
+                    column: {
+                        pointPadding: 0.2,
+                        borderWidth: 0
+                    }
+                },
+                series: compareData
+            }); 
+    else
+        Highcharts.chart('container', {
+            chart: {
+                type: 'line'
+            },
+            title: {
+                text: category
+            },
+            subtitle: {
+                text: 'Source: Census of India'
+            },
+            xAxis: {
+                categories: years
+            },
+            yAxis: {
+                title: {
+                    text: 'Rate'
+                }
+            },
+            plotOptions: {
+                line: {
+                    dataLabels: {
+                        enabled: true
+                    },
+                    enableMouseTracking: false
+                }
+            },
+            series: compareData
+        });
+
+
+})()
+  </script>
+  
