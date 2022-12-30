@@ -1,0 +1,91 @@
+<style>
+    body{
+        background-color: #382851;
+    }
+    #container{
+        height:95vh;
+    }
+</style>
+</style>
+<script src="https://code.highcharts.com/maps/highmaps.js"></script>
+<script src="purple-theme.js"></script>
+<div id="container"></div>
+<script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const state = urlParams.get('state')
+    const type = urlParams.get('type')
+    const id = urlParams.get('id');
+    // console.log(name)
+    (async () => {
+        mainData = await fetch(
+            `https://chartify.in/api/secc/choropleth/${id}/${state}`
+        ).then(response => response.json());
+        let data=[]
+
+        for (i in mainData)
+            if (i!='India' && i!='')
+                data.push([i,mainData[i][type]])
+
+        console.log(data)
+
+        let map = 'https://besnoi.github.io/maps/json/india2018.json'
+
+        if (state!='India')
+            map = 'https://besnoi.github.io/maps/json/'+state.toLowerCase()+'.json'
+
+        const topology = await fetch(map).then(response => response.json());
+
+        mapChart = Highcharts.mapChart('container', {
+            chart: {
+                animation: true,
+                map: topology
+            },
+
+            title: {
+                text: id.replaceAll('-',' ')+' ('+type+')'+', Rural '+state,
+                align:'center'
+            },
+
+            credits:{
+                enabled:false
+            },
+
+            subtitle: {
+                text: 'Source: Socio-Economic Caste Census'
+            },
+
+            mapNavigation: {
+                enabled: true,
+                buttonOptions: {
+                    verticalAlign: 'bottom'
+                }
+            },
+
+            colorAxis: {
+                minColor: "#FDFD96",
+                maxColor: "#ff0000"
+            },
+            tooltip: {
+            pointFormat: '{point.name}: 1 in {point.value}'
+        },
+            
+            series: [{
+                name: 'Ratio',
+                states: {
+                    hover: {
+                        color: '#BADA55'
+                    }
+                },
+                dataLabels: {
+                    enabled: false,
+                    format: '{point.name}'
+                }
+            }]
+        });
+
+        mapChart.update({
+            series:{data:data}
+        })
+    })()
+
+</script>
