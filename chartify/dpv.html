@@ -1,3 +1,4 @@
+
 <style>
     body{
         background-color: #382851;
@@ -13,11 +14,12 @@
 <script>
     const urlParams = new URLSearchParams(window.location.search);
     const state = urlParams.get('state');
+    const district = urlParams.get('district');
     const gender = urlParams.get('gender').toLowerCase();
     // const COLORS = {'hindu':'#FF4500','muslim':'#009000','christian':'#1E90FF','sikh':'#DC143C','buddhist':'#BE7F9D','jain':'#FA8072','other':'#A020F0','atheist':'#808080',};
     (async () => {
         mainData = await fetch(
-            `https://chartify.in/api/decadal_variation/${state}`
+            `https://chartify.in/api/decadal_variation/${state}/${district}`
         ).then(response => response.json());
 
         let barData=[]
