@@ -1,0 +1,103 @@
+
+<style>
+    body{
+        background-color: #382851;
+    }
+    #container{
+        height:95vh;
+    }
+</style>
+</style>
+<script src="https://code.highcharts.com/maps/highmaps.js"></script>
+<script src="purple-theme.js"></script>
+<div id="container"></div>
+<script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const state = urlParams.get('state');
+    const year = urlParams.get('year');
+    const age = urlParams.get('age');
+    religion = urlParams.get('religion').toLowerCase();
+    if (religion=='unstated') religion='atheist'
+    const typology = urlParams.get('typology');
+    // const COLORS = {'hindu':'#FF4500','muslim':'#009000','christian':'#1E90FF','sikh':'#DC143C','buddhist':'#BE7F9D','jain':'#FA8072','other':'#A020F0','atheist':'#808080',};
+    (async () => {
+        mainData = await fetch(
+            `https://chartify.in/api/population_by_age/choropleth/${state}/${typology}/${age}`
+        ).then(response => response.json());
+
+        totalData = await fetch(
+            `https://chartify.in/api/population_by_age/choropleth/${state}/${typology}/All%20ages`
+        ).then(response => response.json());
+
+        let data=[] 
+        // console.log('total_'+gender+'s')
+        for (district in mainData[year])
+            data.push([district,Math.round(10000*(mainData[year][district][religion+'_males']+mainData[year][district][religion+'_females'])/(totalData[year][district][religion+'_males']+totalData[year][district][religion+'_females']))/100])
+        
+    
+        
+        console.log(data)
+
+        function getMap(state){
+            let map=''
+            if (state=='India')
+                map='india-2013'
+            else
+                map=state.toLowerCase()
+            return 'https://besnoi.github.io/maps/json/'+map+'.json'
+        }
+
+    const map  = getMap(state)
+
+    const topology = await fetch(map).then(response => response.json());
+
+    mapChart = Highcharts.mapChart('container', {
+        chart: {
+            map: topology
+        },
+
+        title: {
+            text: religion+' population ('+age+'), '+state+', '+year
+        },
+
+        credits:{
+            enabled:false
+        },
+
+        subtitle: {
+            text: 'Source: Census India'
+        },
+
+        mapNavigation: {
+            enabled: true,
+            buttonOptions: {
+                verticalAlign: 'bottom'
+            }
+        },
+
+        colorAxis: {
+            minColor:'#CABAE5',
+            maxColor:'#673AB7'
+        },
+        
+        series: [{
+            name: 'Percentage',
+            states: {
+                hover: {
+                    color: '#BADA55'
+                }
+            },
+            dataLabels: {
+                enabled: false,
+                format: '{point.name}'
+            }
+        }]
+    });
+        
+    mapChart.update({
+        series:{data:data}
+    })
+
+})()
+</script>
+    
