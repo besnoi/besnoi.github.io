@@ -13,6 +13,7 @@
 <script>
     const urlParams = new URLSearchParams(window.location.search);
     const state = urlParams.get('state');
+    const district = urlParams.get('district');
     const typology = urlParams.get('typology');
     const year = urlParams.get('year');
     const religion = urlParams.get('religion').toLowerCase();
@@ -20,7 +21,7 @@
     (async () => {
 
     const mainData = await fetch(
-        `https://chartify.in/api/population_by_age/data/${state}`
+        `https://chartify.in/api/population_by_age/data/${state}/${district}`
     ).then(response => response.json());
 
     console.log("WORKING")
