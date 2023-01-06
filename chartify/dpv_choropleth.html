@@ -1,0 +1,104 @@
+
+<style>
+    body{
+        background-color: #382851;
+    }
+    #container{
+        height:95vh;
+    }
+</style>
+</style>
+<script src="https://code.highcharts.com/maps/highmaps.js"></script>
+<script src="purple-theme.js"></script>
+<div id="container"></div>
+<script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const state = urlParams.get('state');
+    const year = urlParams.get('year').split('-');
+    const gender = urlParams.get('gender').toLowerCase();
+    // const COLORS = {'hindu':'#FF4500','muslim':'#009000','christian':'#1E90FF','sikh':'#DC143C','buddhist':'#BE7F9D','jain':'#FA8072','other':'#A020F0','atheist':'#808080',};
+    (async () => {
+        mainData = await fetch(
+            `https://chartify.in/api/decadal_variation/choropleth/${state}`
+        ).then(response => response.json());
+
+        let year1=[]
+        let year2=[] 
+        let data=[] 
+        // console.log('total_'+gender+'s')
+        for (district in mainData[year[0]])
+            year1.push([district,mainData[year[0]][district]['total_'+gender+'s']])
+        for (district in mainData[year[1]])
+            year2.push(mainData[year[1]][district]['total_'+gender+'s'])
+        for (i=0;i<year1.length;++i)
+        if (year1[i][0]!='India')    
+            data.push([year1[i][0],year1[i][1]!=0 && Math.round(10000*(year2[i]-year1[i][1])/year1[i][1])/100 || 0])
+
+    
+ 
+        
+        console.log(data)
+
+        function getMap(state){
+            let map=''
+            if (state=='India')
+                map='india-2013'
+            else
+                map=state.toLowerCase()
+            return 'https://besnoi.github.io/maps/json/'+map+'.json'
+        }
+
+    const map  = getMap(state)
+
+    const topology = await fetch(map).then(response => response.json());
+
+    mapChart = Highcharts.mapChart('container', {
+        chart: {
+            map: topology
+        },
+
+        title: {
+            text: 'Decadal Population Variation (' +year[0]+'-'+year[1].substring(2)+'), '+state
+        },
+
+        credits:{
+            enabled:false
+        },
+
+        subtitle: {
+            text: 'Source: Census India'
+        },
+
+        mapNavigation: {
+            enabled: true,
+            buttonOptions: {
+                verticalAlign: 'bottom'
+            }
+        },
+
+        colorAxis: {
+            minColor:'#CABAE5',
+            maxColor:'#673AB7'
+        },
+        
+        series: [{
+            name: 'Percentage',
+            states: {
+                hover: {
+                    color: '#BADA55'
+                }
+            },
+            dataLabels: {
+                enabled: false,
+                format: '{point.name}'
+            }
+        }]
+    });
+        
+    mapChart.update({
+        series:{data:data}
+    })
+
+})()
+</script>
+    
