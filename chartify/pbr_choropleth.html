@@ -34,27 +34,31 @@
         `https://chartify.in/api/population_by_religion/choropleth/${state}/${year}`
     ).then(response => response.json());
 
-        
+    let otherData={}
+
+    console.log(mainData)
+    
     faith = ['hindu', 'muslim', 'christian', 'buddhist', 'sikh', 'jain', 'other', 'atheist']        
     for (sub in mainData){
+        otherData[sub]={}
         faith.forEach(i => {
             for (j of ['males', 'females']) {
                 if (i != 'total')
-                mainData[sub][`${i}_${j}`] = round(mainData[sub][`${i}_${j}`] * 100 / mainData[sub][`total_${j}`])
-                else
-                mainData[sub][`${i}_${j}`] = round(mainData[sub][`${i}_${j}`] * 100 / (mainData[sub]['total_males'] + mainData[sub]['total_females']))
+                otherData[sub][`${i}_${j}`] = round(mainData[sub][`${i}_${j}`] * 100 / mainData[sub][`total_${j}`])
+                // else
+                // mainData[sub][`${i}_${j}`] = round(mainData[sub][`${i}_${j}`] * 100 / (mainData[sub]['total_males'] + mainData[sub]['total_females']))
             }
             if (i != 'total')
-            mainData[sub][`${i}_total`] = round((mainData[sub][`${i}_males`] + mainData[sub][`${i}_females`]) * 100 / (mainData[sub]['total_females'] + mainData[sub]['total_males']))
+            otherData[sub][`${i}_total`] = round((mainData[sub][`${i}_males`] + mainData[sub][`${i}_females`]) * 100 / (mainData[sub]['total_females'] + mainData[sub]['total_males']))
         })
     }
 
-    console.log(mainData)
+    console.log(otherData)
     let data=[]
 
-    for (e in mainData){
+    for (e in otherData){
         console.log(e,religion+'_'+gender)
-        data.push([e,mainData[e][religion+'_'+gender]])
+        data.push([e,otherData[e][religion+'_'+gender]])
     }
     console.log('eq5q',data)
 
