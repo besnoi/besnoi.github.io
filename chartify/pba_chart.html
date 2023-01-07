@@ -47,11 +47,11 @@
     var title = ''
 
     if (religion=='total')
-        title = 'Population pyramid for all communities, '+state+', '+year+' ('+typology+')'
+        title = 'Population pyramid for all communities, '+(district=='' && (district+', ') || '')+ state+', '+year+' ('+typology+')'
     else if (religion=='other')
-        title = 'Population pyramid for other communities, '+state+', '+year+' ('+typology+')'
+        title = 'Population pyramid for other communities, '+(district=='' && (district+', ') || '')+state+', '+year+' ('+typology+')'
     else
-        title='Population pyramid for '+religion+' community'+', '+state+', '+year+' ('+typology+')'
+        title='Population pyramid for '+religion+' community'+', '+(district=='' && (district+', ') || '')+state+', '+year+' ('+typology+')'
 
 
     Highcharts.chart('container', {
