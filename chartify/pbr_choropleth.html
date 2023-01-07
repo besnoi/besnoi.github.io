@@ -18,6 +18,10 @@
     let gender = urlParams.get('gender');
     const COLORS = {'hindu':'#FF4500','muslim':'#009000','christian':'#1E90FF','sikh':'#DC143C','buddhist':'#BE7F9D','jain':'#FA8072','other':'#A020F0','atheist':'#808080',};
     
+    function round(num) {
+    return Math.round(num * 100) / 100
+}
+
     if (gender!='Total')
         gender=gender+'s'
     gender=gender.toLowerCase();
@@ -29,18 +33,19 @@
     mainData = await fetch(
         `https://chartify.in/api/population_by_religion/choropleth/${state}/${year}`
     ).then(response => response.json());
+
         
-    religion = ['total', 'hindu', 'muslim', 'christian', 'buddhist', 'sikh', 'jain', 'other', 'atheist']        
+    faith = ['hindu', 'muslim', 'christian', 'buddhist', 'sikh', 'jain', 'other', 'atheist']        
     for (sub in mainData){
-        religion.forEach(i => {
+        faith.forEach(i => {
             for (j of ['males', 'females']) {
                 if (i != 'total')
-                    states[sub][`${i}_${j}`] = round(mainData[sub][`${i}_${j}`] * 100 / mainData[sub][`total_${j}`])
+                mainData[sub][`${i}_${j}`] = round(mainData[sub][`${i}_${j}`] * 100 / mainData[sub][`total_${j}`])
                 else
-                    states[sub][`${i}_${j}`] = round(mainData[sub][`${i}_${j}`] * 100 / (mainData[sub]['total_males'] + mainData[sub]['total_females']))
+                mainData[sub][`${i}_${j}`] = round(mainData[sub][`${i}_${j}`] * 100 / (mainData[sub]['total_males'] + mainData[sub]['total_females']))
             }
             if (i != 'total')
-                states[sub][`${i}_total`] = round((mainData[sub]row[`${i}_males`] + mainData[sub][`${i}_females`]) * 100 / (row['total_females'] + mainData[sub]['total_males']))
+            mainData[sub][`${i}_total`] = round((mainData[sub][`${i}_males`] + mainData[sub][`${i}_females`]) * 100 / (mainData[sub]['total_females'] + mainData[sub]['total_males']))
         })
     }
 
@@ -48,7 +53,7 @@
     let data=[]
 
     for (e in mainData){
-        console.log(e,religion+'_'+gender,mainData[e])
+        console.log(e,religion+'_'+gender)
         data.push([e,mainData[e][religion+'_'+gender]])
     }
     console.log('eq5q',data)
@@ -98,7 +103,7 @@
         },
 
         subtitle: {
-            text: 'Source map: Census of India'
+            text: 'Source: Census of India'
         },
 
         mapNavigation: {
