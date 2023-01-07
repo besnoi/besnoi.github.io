@@ -15,7 +15,8 @@
     const urlParams = new URLSearchParams(window.location.search);
     const state = urlParams.get('state');
     const year = urlParams.get('year');
-    const age = urlParams.get('age');
+    age = urlParams.get('age');
+    if (age=='80') age = '80+'
     religion = urlParams.get('religion').toLowerCase();
     if (religion=='unstated') religion='atheist'
     const typology = urlParams.get('typology');
