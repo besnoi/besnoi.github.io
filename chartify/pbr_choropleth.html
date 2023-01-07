@@ -29,6 +29,20 @@
     mainData = await fetch(
         `https://chartify.in/api/population_by_religion/choropleth/${state}/${year}`
     ).then(response => response.json());
+        
+    religion = ['total', 'hindu', 'muslim', 'christian', 'buddhist', 'sikh', 'jain', 'other', 'atheist']        
+    for (sub in mainData){
+        religion.forEach(i => {
+            for (j of ['males', 'females']) {
+                if (i != 'total')
+                    states[sub][`${i}_${j}`] = round(mainData[sub][`${i}_${j}`] * 100 / mainData[sub][`total_${j}`])
+                else
+                    states[sub][`${i}_${j}`] = round(mainData[sub][`${i}_${j}`] * 100 / (mainData[sub]['total_males'] + mainData[sub]['total_females']))
+            }
+            if (i != 'total')
+                states[sub][`${i}_total`] = round((mainData[sub]row[`${i}_males`] + mainData[sub][`${i}_females`]) * 100 / (row['total_females'] + mainData[sub]['total_males']))
+        })
+    }
 
     console.log(mainData)
     let data=[]
