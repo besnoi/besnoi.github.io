@@ -76,7 +76,6 @@
             else
                 data.push([district,Math.round(10000*(mainData[industry][district]['total_males']+mainData[industry][district]['total_females'])/(mainData['Total Workers'][district]['total_males']+mainData['Total Workers'][district]['total_females']))/100])
         }
-        
     
         
         console.log(data)
@@ -100,7 +99,7 @@
         },
 
         title: {
-            text: industry+' ('+typology+'), '+state+', '+year +' (Age '+age+')'
+            text: typology+' '+industry+', '+state+', '+year +' (Age '+age+')'
         },
 
         credits:{
