@@ -71,7 +71,7 @@
             // console.log(mainData['Total Workers'])
             if (district==state)
                 continue
-            if (industry=='Total Workers')
+            if (industry.length=='Total Workers'.length)
                 data.push([district,Math.round(10000*(mainData['Total Workers'][district]['total_males']+mainData['Total Workers'][district]['total_females']))])
             else
                 data.push([district,Math.round(10000*(mainData[industry][district]['total_males']+mainData[industry][district]['total_females'])/(mainData['Total Workers'][district]['total_males']+mainData['Total Workers'][district]['total_females']))/100])
