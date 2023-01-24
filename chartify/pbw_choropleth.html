@@ -59,9 +59,9 @@
     const typology = urlParams.get('typology');
     // const COLORS = {'hindu':'#FF4500','muslim':'#009000','christian':'#1E90FF','sikh':'#DC143C','buddhist':'#BE7F9D','jain':'#FA8072','other':'#A020F0','atheist':'#808080',};
     (async () => {
-        console.log(`https://chartify.in/api/population_by_work/choropleth/${year}/${state}/${typology}/${age}`)
+        console.log(`https://chartify.in/api/population_by_work/choropleth/${year}/${state}/${typology[0]}/${age}`)
         mainData = await fetch(
-            `https://chartify.in/api/population_by_work/choropleth/${year}/${state}/${typology}/${age}`
+            `https://chartify.in/api/population_by_work/choropleth/${year}/${state}/${typology[0]}/${age}`
         ).then(response => response.json());
 
         let data=[] 
