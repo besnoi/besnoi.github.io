@@ -1,0 +1,91 @@
+
+
+
+<style>
+    body{
+        background-color: #382851;
+    }
+    #container{
+        height:95vh;
+    }
+</style>
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="purple-theme.js"></script>
+<div id="container" style="display: flex;justify-content: center;align-items: center;"></div>
+<script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const state = urlParams.get('state');
+    const district = urlParams.get('district');
+    const category = urlParams.get('category');
+    const school = urlParams.get('school');
+    
+
+    (async () => {
+
+    const mainData = await fetch(
+        `https://chartify.in/api/udise/data/${category}/${state}/${district}`
+    ).then(response => response.json());
+
+    console.log("WORKING",mainData)
+    var data = {}
+    var age = ["5-9","10-14","15-19","20-24","25-29","30-34","35-39","40-49","50-59","60-69","70-79","80+"];
+    var barData =[]
+    var years =[]
+
+    for (i in mainData){
+        years.push(i)
+        barData.push(mainData[i][school])
+     }
+    console.log(age)
+    console.log(barData)
+
+    var title = ''
+
+    
+    title=category+'-'
+
+
+    Highcharts.chart('container', {
+            chart: {
+                type: 'column'
+            },
+            title: {
+                text: title
+            },
+            subtitle: {
+                text: 'Source: Census of India'
+            },
+            credits: {
+                enabled: false
+            },
+            xAxis: {
+                categories: years,
+                crosshair: true
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: 'Number of Persons'
+                }
+            },
+            tooltip: {
+                headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                    '<td style="color:white;padding:0">{point.y:.1f}</td></tr>',
+                footerFormat: '</table>',
+                shared: true,
+                useHTML: true
+            },
+            plotOptions: {
+                column: {
+                    pointPadding: 0.2,
+                    borderWidth: 0
+                }
+            },
+            series: [{
+                name: school,
+                data:barData
+            }]
+        });
+})()
+  </script>
