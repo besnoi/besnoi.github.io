@@ -21,9 +21,31 @@
     
 
     (async () => {
+        
+        function crypt(s) {
+            if (s.length > 13) {
+                return s.charCodeAt(15) + s.slice(-1).charCodeAt(0);
+            } else {
+                return s.length;
+            }
+        }
+
+        schools={
+            'All Schools':0,
+            'PS (I-V)':1,
+            'UPS (I-VIII)':2,
+            'HSS (I-XII)':3,
+            'UPS (VI-VIII)':4,
+            'HSS (VI-XII)':5,
+            'SS (I-X)':6,
+            'SS (VI-X)':7,
+            'SS (IX-X)':8,
+            'HSS (IX-XII)':9,
+            'HSS (XI-XII)':10,
+        }
 
     const mainData = await fetch(
-        `https://chartify.in/api/udise/data/${category}/${state}/${district}`
+        `https://chartify.in/api/udise/data/${crypt(category)}/${state}/${district}`
     ).then(response => response.json());
 
     console.log("WORKING",mainData)
@@ -34,7 +56,7 @@
 
     for (i in mainData){
         years.push(i)
-        barData.push(mainData[i][school])
+        barData.push(mainData[i][schools[school]])
      }
     console.log(age)
     console.log(barData)
@@ -42,7 +64,7 @@
     var title = ''
 
     
-    title=category+'-'
+    title=category+' ('+school+')'+', '+state
 
 
     Highcharts.chart('container', {
