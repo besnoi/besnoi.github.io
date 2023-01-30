@@ -48,7 +48,7 @@
         `https://chartify.in/api/udise/data/${crypt(category)}/${state}/${district}`
     ).then(response => response.json());
 
-    console.log("WORKING",mainData)
+    console.log( `https://chartify.in/api/udise/data/${crypt(category)}/${state}/${district}`,mainData)
     var data = {}
     var age = ["5-9","10-14","15-19","20-24","25-29","30-34","35-39","40-49","50-59","60-69","70-79","80+"];
     var barData =[]
