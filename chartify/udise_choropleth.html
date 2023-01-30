@@ -1,0 +1,124 @@
+<style>
+    body{
+        background-color: #382851;
+    }
+    #container{
+        height:95vh;
+    }
+</style>
+</style>
+<script src="https://code.highcharts.com/maps/highmaps.js"></script>
+<script src="purple-theme.js"></script>
+<div id="container"></div>
+<script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const state = urlParams.get('state')
+    const school = urlParams.get('school')
+    const category = urlParams.get('category');
+    const year = urlParams.get('year');
+    // console.log(name)
+    (async () => {
+
+        function crypt(s) {
+            if (s.length > 13) {
+                return s.charCodeAt(15) + s.slice(-1).charCodeAt(0);
+            } else {
+                return s.length;
+            }
+        }
+
+        schools={
+            'All Schools':0,
+            'PS (I-V)':1,
+            'UPS (I-VIII)':2,
+            'HSS (I-XII)':3,
+            'UPS (VI-VIII)':4,
+            'HSS (VI-XII)':5,
+            'SS (I-X)':6,
+            'SS (VI-X)':7,
+            'SS (IX-X)':8,
+            'HSS (IX-XII)':9,
+            'HSS (XI-XII)':10,
+        }
+        totalData=[]
+
+        mainData = await fetch(
+            `https://chartify.in/api/udise/choropleth/${crypt(category)}/${state}/${year}`
+        ).then(response => response.json());
+        if (category!="Total Schools")
+            totalData = await fetch(
+                `https://chartify.in/api/udise/choropleth/${crypt('Total Schools')}/${state}/${year}`
+            ).then(response => response.json());
+
+
+        let data=[]
+        console.log(mainData)
+
+        for (i in mainData)
+            if (i!='India' && i!=''){
+                if (category!="Total Schools")
+                    data.push([i,Math.round(10000*mainData[i][schools[school]]/totalData[i][schools[school]])/100])
+                else
+                    data.push([i,mainData[i][schools[school]]])
+            }
+
+
+        console.log(data)
+
+        let map = 'https://besnoi.github.io/maps/json/india2018.json'
+
+        if (state!='India')
+            map = 'https://besnoi.github.io/maps/json/'+state.toLowerCase()+'.json'
+
+        const topology = await fetch(map).then(response => response.json());
+
+        mapChart = Highcharts.mapChart('container', {
+            chart: {
+                animation: true,
+                map: topology
+            },
+
+            title: {
+                text: category.replaceAll('-',' ')+' ('+school+')'+', '+state,
+                align:'center'
+            },
+
+            credits:{
+                enabled:false
+            },
+
+            subtitle: {
+                text: 'Source: UDISE-PLUS'
+            },
+
+            mapNavigation: {
+                enabled: true,
+                buttonOptions: {
+                    verticalAlign: 'bottom'
+                }
+            },
+
+            colorAxis: {
+                minColor: "#FDFD96",
+                maxColor: "#ff0000"
+            },
+            
+            series: [{
+                name: 'Ratio',
+                states: {
+                    hover: {
+                        color: '#BADA55'
+                    }
+                },
+                dataLabels: {
+                    enabled: false,
+                    format: '{point.name}'
+                }
+            }]
+        });
+        mapChart.update({
+            series:{data:data}
+        })
+    })()
+
+</script>
