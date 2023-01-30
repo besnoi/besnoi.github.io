@@ -23,7 +23,7 @@
     (async () => {
 
     const mainData = await fetch(
-        `https://chartify.in/api/population_by_work/data/${typology}/${state}/${district}`
+        `https://chartify.in/api/population_by_work/data/${typology[0]}/${state}/${district}`
     ).then(response => response.json());
 
     console.log("WORKING",mainData)
@@ -36,8 +36,8 @@
 
     for (i of age){
         console.log(i,'work')
-        maleData.push(-mainData[year][industry][i]['total_males'])
-        femaleData.push(mainData[year][industry][i]['total_females'])
+        maleData.push(-mainData[year][industry.length][i]['total_males'])
+        femaleData.push(mainData[year][industry.length][i]['total_females'])
      }
     console.log(age)
     console.log(maleData)
