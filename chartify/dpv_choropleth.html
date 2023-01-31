@@ -78,18 +78,39 @@
         
         console.log(data)
 
-        function getMap(state){
-            let map=''
-            if (state=='India')
-                map='india-2013'
-            else
-                map=state.toLowerCase()
-            return 'https://besnoi.github.io/maps/json/'+map+'.json'
-        }
+        function getMap(){
+            if (state === "India") 
+                if (parseInt(year) < 2000) 
+                    mapURL = "https://besnoi.github.io/maps/json/india-1999.json";
+                else if (parseInt(year)<2014) 
+                    mapURL = "https://besnoi.github.io/maps/json/india-2013.json";
+                else if (parseInt(year)<2019) 
+                    mapURL = "https://besnoi.github.io/maps/json/india2018.json";
+                else
+                    mapURL = "https://besnoi.github.io/maps/json/india-2019.json"
 
-    const map  = getMap(state)
+            else 
+                if (state === "Andhra Pradesh" && Number.parseInt(year) < 2014) 
+                    mapURL = "https://besnoi.github.io/maps/json/andhra-pradesh-2014.json";
+                else 
+                    mapURL = "https://besnoi.github.io/maps/json/" + state.toLowerCase() + ".json";
+                
+            
+            if (parseInt(year) < 2001 && ["Bihar", "Madhya Pradesh", "Uttar Pradesh"].includes(state)) 
+                mapURL = `https://besnoi.github.io/maps/json/${state.toLowerCase()}-1999.json`;
+            else 
+                if (Number.parseInt(year) < 2011 && ["Bihar", "Madhya Pradesh", "Uttar Pradesh"].includes(state))
+                    mapURL = `https://besnoi.github.io/maps/json/${state.toLowerCase()}-2001.json`;
+                else 
+                    if (Number.parseInt(year) < 2021 &&  ["Uttar Pradesh"].includes(state)) 
+                        mapURL = `https://besnoi.github.io/maps/json/${state.toLowerCase()}-2011.json`;
+            if (state=='Jammu and Kashmir' && parseInt(year)>=2019)
+                mapURL='https://besnoi.github.io/maps/json/jammu and kashmir-2019.json'
+            return mapURL
+        
+            }
 
-    const topology = await fetch(map).then(response => response.json());
+    const topology = await fetch(getMap()).then(response => response.json());
 
     mapChart = Highcharts.mapChart('container', {
         chart: {
