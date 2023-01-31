@@ -72,9 +72,9 @@
             if (district==state)
                 continue
             if (industry.length=='Total Workers'.length)
-                data.push([district,Math.round(10000*(mainData['Total Workers'.length][district]['total_males']+mainData['Total Workers'.length][district]['total_females']))])
+                data.push([district,Math.round(10000*(mainData['Total Workers'.length][district]['m']+mainData['Total Workers'.length][district]['f']))])
             else
-                data.push([district,Math.round(10000*(mainData[industry.length][district]['total_males']+mainData[industry.length][district]['total_females'])/(mainData['Total Workers'.length][district]['total_males']+mainData['Total Workers'.length][district]['total_females']))/100])
+                data.push([district,Math.round(10000*(mainData[industry.length][district]['m']+mainData[industry.length][district]['f'])/(mainData['Total Workers'.length][district]['m']+mainData['Total Workers'.length][district]['f']))/100])
         }
     
         
