@@ -110,29 +110,39 @@
     console.log('eq5q',data)
 
 
-    // SELECT MAP
-    if (state === "India") 
-        if (Number.parseInt(year) < 2000) 
-            mapURL = "https://besnoi.github.io/maps/json/india-1999.json";
-        else 
-            mapURL = "https://besnoi.github.io/maps/json/india-2013.json";
-    else 
-        if (state === "Andhra Pradesh" && Number.parseInt(year) < 2014) 
-            mapURL = "https://besnoi.github.io/maps/json/andhra-pradesh-2014.json";
-        else 
-            mapURL = "https://besnoi.github.io/maps/json/" + state.toLowerCase() + ".json";
+   function getMap(){
+            if (state === "India") 
+                if (parseInt(year) < 2000) 
+                    mapURL = "https://besnoi.github.io/maps/json/india-1999.json";
+                else if (parseInt(year)<2014) 
+                    mapURL = "https://besnoi.github.io/maps/json/india-2013.json";
+                else if (parseInt(year)<2019) 
+                    mapURL = "https://besnoi.github.io/maps/json/india2018.json";
+                else
+                    mapURL = "https://besnoi.github.io/maps/json/india-2019.json"
+
+            else 
+                if (state === "Andhra Pradesh" && Number.parseInt(year) < 2014) 
+                    mapURL = "https://besnoi.github.io/maps/json/andhra-pradesh-2014.json";
+                else 
+                    mapURL = "https://besnoi.github.io/maps/json/" + state.toLowerCase() + ".json";
+                
+            
+            if (parseInt(year) < 2001 && ["Bihar", "Madhya Pradesh", "Uttar Pradesh"].includes(state)) 
+                mapURL = `https://besnoi.github.io/maps/json/${state.toLowerCase()}-1999.json`;
+            else 
+                if (Number.parseInt(year) < 2011 && ["Bihar", "Madhya Pradesh", "Uttar Pradesh"].includes(state))
+                    mapURL = `https://besnoi.github.io/maps/json/${state.toLowerCase()}-2001.json`;
+                else 
+                    if (Number.parseInt(year) < 2021 &&  ["Uttar Pradesh"].includes(state)) 
+                        mapURL = `https://besnoi.github.io/maps/json/${state.toLowerCase()}-2011.json`;
+            if (state=='Jammu and Kashmir' && parseInt(year)>=2019)
+                mapURL='https://besnoi.github.io/maps/json/jammu and kashmir-2019.json'
+            return mapURL
         
-    
-    if (parseInt(year) < 2001 && ["Bihar", "Madhya Pradesh", "Uttar Pradesh"].includes(state)) 
-        mapURL = `https://besnoi.github.io/maps/json/${state.toLowerCase()}-1999.json`;
-    else 
-        if (Number.parseInt(year) < 2011 && ["Bihar", "Madhya Pradesh", "Uttar Pradesh"].includes(state))
-            mapURL = `https://besnoi.github.io/maps/json/${state.toLowerCase()}-2001.json`;
-        else 
-            if (Number.parseInt(year) < 2021 &&  ["Uttar Pradesh"].includes(state)) 
-                mapURL = `https://besnoi.github.io/maps/json/${state.toLowerCase()}-2011.json`;
+            }
         
-    const topology = await fetch(mapURL).then(response => response.json());
+    const topology = await fetch(getMap()).then(response => response.json());
 
     let title=urlParams.get('gender')+' '+religion + ' population by '+(state=='India' && 'State' || ('District, '+state))+', '+year
 
