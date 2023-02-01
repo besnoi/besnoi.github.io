@@ -1,0 +1,194 @@
+
+
+<style>
+    body{
+        background-color: #382851;
+    }
+    #container{
+        height:95vh;
+    }
+</style>
+</style>
+<script src="https://code.highcharts.com/maps/highmaps.js"></script>
+<script src="purple-theme.js"></script>
+<div id="container" style="display: flex;justify-content: center;align-items: center;">
+    
+<svg style="width: 100px;height: 100px;margin: 20px;" version="1.1" id="L7" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+  viewBox="0 0 100 100" enable-background="new 0 0 100 100" xml:space="preserve">
+ <path fill="#fff" d="M31.6,3.5C5.9,13.6-6.6,42.7,3.5,68.4c10.1,25.7,39.2,38.3,64.9,28.1l-3.1-7.9c-21.3,8.4-45.4-2-53.8-23.3
+  c-8.4-21.3,2-45.4,23.3-53.8L31.6,3.5z">
+      <animateTransform 
+         attributeName="transform" 
+         attributeType="XML" 
+         type="rotate"
+         dur="2s" 
+         from="0 50 50"
+         to="360 50 50" 
+         repeatCount="indefinite" />
+  </path>
+ <path fill="#fff" d="M42.3,39.6c5.7-4.3,13.9-3.1,18.1,2.7c4.3,5.7,3.1,13.9-2.7,18.1l4.1,5.5c8.8-6.5,10.6-19,4.1-27.7
+  c-6.5-8.8-19-10.6-27.7-4.1L42.3,39.6z">
+      <animateTransform 
+         attributeName="transform" 
+         attributeType="XML" 
+         type="rotate"
+         dur="1s" 
+         from="0 50 50"
+         to="-360 50 50" 
+         repeatCount="indefinite" />
+  </path>
+ <path fill="#fff" d="M82,35.7C74.1,18,53.4,10.1,35.7,18S10.1,46.6,18,64.3l7.6-3.4c-6-13.5,0-29.3,13.5-35.3s29.3,0,35.3,13.5
+  L82,35.7z">
+      <animateTransform 
+         attributeName="transform" 
+         attributeType="XML" 
+         type="rotate"
+         dur="2s" 
+         from="0 50 50"
+         to="360 50 50" 
+         repeatCount="indefinite" />
+  </path>
+</svg>
+
+  </div>
+<script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const state = urlParams.get('state');
+    const year = urlParams.get('year').split('-');
+    const religion = urlParams.get('religion').toLowerCase();
+    const gender = urlParams.get('gender').toLowerCase();
+    // const COLORS = {'hindu':'#FF4500','muslim':'#009000','christian':'#1E90FF','sikh':'#DC143C','buddhist':'#BE7F9D','jain':'#FA8072','other':'#A020F0','atheist':'#808080',};
+    (async () => {
+        fromData = await fetch(
+            `https://chartify.in/api/population_by_religion/choropleth/${state}/${year[0]}`
+        ).then(response => response.json());
+
+        toData = await fetch(
+            `https://chartify.in/api/population_by_religion/choropleth/${state}/${year[1]}`
+        ).then(response => response.json());
+        console.log(fromData,toData)
+
+        faith = ['hindu', 'muslim', 'christian', 'buddhist', 'sikh', 'jain', 'other', 'atheist']        
+        mainData={}
+        for (sub in fromData){
+            mainData[sub]={}
+            faith.forEach(i => {
+                for (j of ['males', 'females']) {
+                    if (i != 'total')
+                    mainData[sub][`${i}_${j}`] = perc(fromData[sub][`${i}_${j}`],toData[sub] && toData[sub][`${i}_${j}`] || 0)
+                }
+                if (i != 'total')
+                mainData[sub][`${i}_total`] = perc((fromData[sub][`${i}_males`] + fromData[sub][`${i}_females`]),((toData[sub] && toData[sub][`${i}_males`] || 0) + ((toData[sub] && toData[sub][`${i}_females`] || 0)) ))
+            })
+        }
+        console.log(mainData)
+
+        let year1=[]
+        let year2=[] 
+        let data=[] 
+        function getGender(gender){
+            if (gender!='total')
+                return gender+'s'
+            return 'total'
+        }
+        // console.log('total_'+gender+'s')
+        for (district in mainData)
+            if (district!='India')    
+                data.push([district,mainData[district][religion+'_'+getGender(gender)]])
+        
+         
+        console.log(data)
+
+        function perc(a,b){
+            if (a==0 || b==0)
+                return a || b;
+            else
+                return Math.round(10000*(b-a)/a)/100
+        }
+
+        function getMap(year){
+            if (state === "India") 
+                if (parseInt(year) < 2000) 
+                    mapURL = "https://besnoi.github.io/maps/json/india-1999.json";
+                else if (parseInt(year)<2014) 
+                    mapURL = "https://besnoi.github.io/maps/json/india-2013.json";
+                else if (parseInt(year)<2019) 
+                    mapURL = "https://besnoi.github.io/maps/json/india2018.json";
+                else
+                    mapURL = "https://besnoi.github.io/maps/json/india-2019.json"
+
+            else 
+                if (state === "Andhra Pradesh" && Number.parseInt(year) < 2014) 
+                    mapURL = "https://besnoi.github.io/maps/json/andhra-pradesh-2014.json";
+                else 
+                    mapURL = "https://besnoi.github.io/maps/json/" + state.toLowerCase() + ".json";
+                
+            
+            if (parseInt(year) < 2001 && ["Bihar", "Madhya Pradesh", "Uttar Pradesh"].includes(state)) 
+                mapURL = `https://besnoi.github.io/maps/json/${state.toLowerCase()}-1999.json`;
+            else 
+                if (Number.parseInt(year) < 2011 && ["Bihar", "Madhya Pradesh", "Uttar Pradesh"].includes(state))
+                    mapURL = `https://besnoi.github.io/maps/json/${state.toLowerCase()}-2001.json`;
+                else 
+                    if (Number.parseInt(year) < 2021 &&  ["Uttar Pradesh"].includes(state)) 
+                        mapURL = `https://besnoi.github.io/maps/json/${state.toLowerCase()}-2011.json`;
+            if (state=='Jammu and Kashmir' && parseInt(year)>=2019)
+                mapURL='https://besnoi.github.io/maps/json/jammu and kashmir-2019.json'
+            return mapURL
+        
+            }
+
+    const topology = await fetch(getMap(year[1])).then(response => response.json());
+
+    mapChart = Highcharts.mapChart('container', {
+        chart: {
+            map: topology
+        },
+
+        title: {
+            text: religion+' Population Growth (' +year[0]+'-'+year[1].substring(2)+'), '+state
+        },
+
+        credits:{
+            enabled:false
+        },
+
+        subtitle: {
+            text: 'Source: Census India'
+        },
+
+        mapNavigation: {
+            enabled: true,
+            buttonOptions: {
+                verticalAlign: 'bottom'
+            }
+        },
+
+        colorAxis: {
+            min:0,
+            max:25,
+            minColor:'#CABAE5',
+            maxColor:'#673AB7'
+        },
+        
+        series: [{
+            name: 'Percentage',
+            states: {
+                hover: {
+                    color: '#BADA55'
+                }
+            },
+            dataLabels: {
+                enabled: false,
+                format: '{point.name}'
+            }
+        }]
+    });
+        
+    mapChart.update({
+        series:{data:data}
+    })
+
+})()
+</script>
+    
