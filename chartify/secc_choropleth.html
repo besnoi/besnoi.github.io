@@ -68,7 +68,7 @@
 
         for (i in mainData)
             if (i!='India' && i!=''){
-                if (category!="total-households")
+                if (id!="total-households")
                     data.push([i,Math.round(10000*mainData[i][type]/totalData[i][type])/100])
                 else
                     data.push([i,mainData[i][type]])
