@@ -1,3 +1,4 @@
+
 <style>
     body{
         background-color: #382851;
@@ -10,7 +11,7 @@
 <script src="https://code.highcharts.com/maps/highmaps.js"></script>
 <script src="purple-theme.js"></script>
 <div id="container" style="display: flex;justify-content: center;align-items: center;">
- <svg style="width: 100px;height: 100px;margin: 20px;" version="1.1" id="L7" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+    <svg style="width: 100px;height: 100px;margin: 20px;" version="1.1" id="L7" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
   viewBox="0 0 100 100" enable-background="new 0 0 100 100" xml:space="preserve">
  <path fill="#fff" d="M31.6,3.5C5.9,13.6-6.6,42.7,3.5,68.4c10.1,25.7,39.2,38.3,64.9,28.1l-3.1-7.9c-21.3,8.4-45.4-2-53.8-23.3
   c-8.4-21.3,2-45.4,23.3-53.8L31.6,3.5z">
@@ -46,42 +47,64 @@
          repeatCount="indefinite" />
   </path>
 </svg>
+
 </div>
 <script>
     const urlParams = new URLSearchParams(window.location.search);
     const state = urlParams.get('state')
-    const year = 2014
-    const type = urlParams.get('type')
-    const id = urlParams.get('id');
+    const school = urlParams.get('school')
+    const category = urlParams.get('category');
+    const year = urlParams.get('year');
     // console.log(name)
     (async () => {
+
+        function crypt(s) {
+            if (s.length > 13) {
+                return s.charCodeAt(15) + s.slice(-1).charCodeAt(0);
+            } else {
+                return s.length;
+            }
+        }
+
+        schools={
+            'All Schools':0,
+            'PS (I-V)':1,
+            'UPS (I-VIII)':2,
+            'HSS (I-XII)':3,
+            'UPS (VI-VIII)':4,
+            'HSS (VI-XII)':5,
+            'SS (I-X)':6,
+            'SS (VI-X)':7,
+            'SS (IX-X)':8,
+            'HSS (IX-XII)':9,
+            'HSS (XI-XII)':10,
+        }
+        totalData=[]
+
         mainData = await fetch(
-            `https://chartify.in/api/secc/choropleth/${id}/${state}`
+            `https://chartify.in/api/udise/choropleth/${crypt(category)}/${state}/${year}`
         ).then(response => response.json());
-        if (category!="Total Households")
+        if (category!="Total Schools")
             totalData = await fetch(
-                `https://chartify.in/api/udise/choropleth/${crypt('Total Households')}/${state}/${year}`
+                `https://chartify.in/api/udise/choropleth/${crypt('Total Schools')}/${state}/${year}`
             ).then(response => response.json());
 
 
+        let data=[]
         console.log(mainData)
 
         for (i in mainData)
             if (i!='India' && i!=''){
-                if (category!="Total Households")
-                    data.push([i,Math.round(10000*mainData[i][type]/totalData[i][type])/100])
+                if (category!="Total Schools")
+                    data.push([i,Math.round(10000*mainData[i][schools[school]]/totalData[i][schools[school]])/100])
                 else
-                    data.push([i,mainData[i][type]])
+                    data.push([i,mainData[i][schools[school]]])
             }
-        let data=[]
 
-        for (i in mainData)
-            if (i!='India' && i!='')
-                data.push([i,mainData[i][type]])
 
         console.log(data)
 
-    function getMap(){
+        function getMap(){
             if (state === "India") 
                 if (parseInt(year) < 2000) 
                     mapURL = "https://besnoi.github.io/maps/json/india-1999.json";
@@ -112,6 +135,7 @@
             return mapURL
         
             }
+                
 
         const topology = await fetch(getMap()).then(response => response.json());
 
@@ -122,7 +146,7 @@
             },
 
             title: {
-                text: id.replaceAll('-',' ')+' ('+type+')'+', Rural '+state,
+                text: category.replaceAll('-',' ')+' ('+school+')'+', '+state,
                 align:'center'
             },
 
@@ -131,7 +155,7 @@
             },
 
             subtitle: {
-                text: 'Source: Socio-Economic Caste Census'
+                text: 'Source: UDISE-PLUS'
             },
 
             mapNavigation: {
@@ -145,12 +169,9 @@
                 minColor:'#CABAE5',
                 maxColor:'#673AB7'
             },
-            tooltip: {
-            pointFormat: '{point.name}: {point.value}'
-        },
             
             series: [{
-                name: 'Ratio',
+                name: category!="Total Schools" && 'Percentage' || 'Number',
                 states: {
                     hover: {
                         color: '#BADA55'
@@ -162,7 +183,6 @@
                 }
             }]
         });
-
         mapChart.update({
             series:{data:data}
         })
