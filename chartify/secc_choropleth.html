@@ -58,9 +58,9 @@
         mainData = await fetch(
             `https://chartify.in/api/secc/choropleth/${id}/${state}`
         ).then(response => response.json());
-        if (category!="Total Households")
+        if (id!="total-households")
             totalData = await fetch(
-                `https://chartify.in/api/udise/choropleth/${crypt('Total Households')}/${state}/${year}`
+                `https://chartify.in/api/udise/choropleth/${crypt('total-households')}/${state}/${year}`
             ).then(response => response.json());
 
 
@@ -68,7 +68,7 @@
 
         for (i in mainData)
             if (i!='India' && i!=''){
-                if (category!="Total Households")
+                if (category!="total-households")
                     data.push([i,Math.round(10000*mainData[i][type]/totalData[i][type])/100])
                 else
                     data.push([i,mainData[i][type]])
