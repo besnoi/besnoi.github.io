@@ -40,7 +40,10 @@
                 ).then(response => response.json());
         }
     } else{//RATE??
+
         rate = category.replaceAll(' ','-').toLowerCase()
+        if (rate=='decadal-growth-of-population')
+            rate = 'decadal-growth-rate-of-population'
         mainData = await fetch(
             `https://chartify.in/api/economy/data/${state}/${rate}`
         ).then(response => response.json());
