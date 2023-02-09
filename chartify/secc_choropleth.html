@@ -63,7 +63,7 @@
                 `https://chartify.in/api/udise/choropleth/${crypt('total-households')}/${state}/${year}`
             ).then(response => response.json());
 
-
+let data=[]
         console.log(mainData)
 
         for (i in mainData)
@@ -73,7 +73,7 @@
                 else
                     data.push([i,mainData[i][type]])
             }
-        let data=[]
+        
 
         for (i in mainData)
             if (i!='India' && i!='')
